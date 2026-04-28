@@ -1,0 +1,18 @@
+<%- include('../partials/header') %>
+
+<h1>Fixture</h1>
+
+<div class="grid">
+  <% partidos.forEach(partido => { %>
+    <div class="card">
+      <h3><%= partido.categoria?.nombre || 'Sin categoría' %></h3>
+      <p><strong>Rival:</strong> <%= partido.rival %></p>
+      <p><strong>Fecha:</strong> <%= new Date(partido.fecha).toLocaleDateString('es-UY') %></p>
+      <p><strong>Hora:</strong> <%= partido.hora || 'A confirmar' %></p>
+      <p><strong>Cancha:</strong> <%= partido.cancha || 'A confirmar' %></p>
+      <p><strong>Estado:</strong> <%= partido.estado %></p>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('../partials/footer') %>

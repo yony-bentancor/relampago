@@ -1,0 +1,16 @@
+<%- include('../partials/header') %>
+
+<h1>Categorías</h1>
+
+<div class="grid">
+  <% categorias.forEach(categoria => { %>
+    <div class="card">
+      <h3><%= categoria.nombre %></h3>
+      <p><strong>Horario:</strong> 15:00hs</p>
+      <p><strong>Días:</strong> <%= categoria.diasEntrenamiento?.join(', ') || 'A definir' %></p>
+      <p><%= categoria.descripcion || 'Sin descripción.' %></p>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('../partials/footer') %>

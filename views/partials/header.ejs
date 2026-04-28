@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Club Relámpago</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="/" class="logo"><img src="/img/rela.jpg"> </a>
+
+      <nav>
+        <a href="/">Inicio</a>
+        <a href="/categorias">Categorías</a>
+        <a href="/fixture">Fixture</a>
+        <a href="/noticias">Noticias</a>
+        <a href="/inscripcion">Inscripción</a>
+
+        <% if (user) { %>
+          <% if (user.rol === 'admin') { %>
+            <a href="/admin">Admin</a>
+          <% } %>
+
+          <% if (user.rol === 'padre') { %>
+            <a href="/padres/dashboard">Mi panel</a>
+          <% } %>
+
+          <a href="/logout">Salir</a>
+        <% } else { %>
+          <a href="/login">Ingresar</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">

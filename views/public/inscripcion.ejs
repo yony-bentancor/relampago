@@ -1,0 +1,22 @@
+<%- include('../partials/header') %>
+
+<h1>Inscripción</h1>
+
+<% if (ok) { %>
+  <p class="success">Inscripción enviada correctamente.</p>
+<% } %>
+
+<form action="/inscripcion" method="POST" class="form-card">
+  <input type="text" name="nombreNinio" placeholder="Nombre del niño" required>
+  <input type="date" name="fechaNacimiento">
+  <input type="text" name="categoriaInteres" placeholder="Categoría de interés">
+  <input type="text" name="nombreResponsable" placeholder="Nombre del responsable" required>
+  <input type="text" name="telefono" placeholder="Teléfono" required>
+  <input type="email" name="email" placeholder="Email">
+  <input type="text" name="barrio" placeholder="Barrio">
+  <textarea name="experienciaPrevia" placeholder="Experiencia previa"></textarea>
+  <textarea name="observacionesMedicas" placeholder="Observaciones médicas"></textarea>
+  <button type="submit" class="btn">Enviar inscripción</button>
+</form>
+
+<%- include('../partials/footer') %>

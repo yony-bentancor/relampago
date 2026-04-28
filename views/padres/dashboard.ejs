@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+<h1>Panel de familias</h1>
+
+<section>
+  <h2>Mis hijos</h2>
+  <div class="grid">
+    <% hijos.forEach(hijo => { %>
+      <div class="card">
+        <h3><%= hijo.nombre %></h3>
+        <p><strong>Categoría:</strong> <%= hijo.categoria?.nombre || 'Sin categoría' %></p>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<section>
+  <h2>Próximos partidos</h2>
+  <div class="grid">
+    <% proximosPartidos.forEach(partido => { %>
+      <div class="card">
+        <h3><%= partido.categoria?.nombre || 'Sin categoría' %></h3>
+        <p><strong>Rival:</strong> <%= partido.rival %></p>
+        <p><strong>Fecha:</strong> <%= new Date(partido.fecha).toLocaleDateString('es-UY') %></p>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<section>
+  <h2>Noticias</h2>
+  <div class="grid">
+    <% noticias.forEach(noticia => { %>
+      <div class="card">
+        <h3><%= noticia.titulo %></h3>
+        <p><%= noticia.resumen || 'Sin resumen' %></p>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

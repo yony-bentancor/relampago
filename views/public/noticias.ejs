@@ -1,0 +1,15 @@
+<%- include('../partials/header') %>
+
+<h1>Noticias</h1>
+
+<div class="grid">
+  <% noticias.forEach(noticia => { %>
+    <div class="card">
+      <h3><%= noticia.titulo %></h3>
+      <p><%= noticia.resumen || 'Sin resumen' %></p>
+      <small><%= new Date(noticia.createdAt).toLocaleDateString('es-UY') %></small>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('../partials/footer') %>

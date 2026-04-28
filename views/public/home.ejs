@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+
+<section class="hero">
+  <h1>Club Relámpago</h1>
+  <p>Formando jugadores, amigos y barrio.</p>
+  <div class="hero-buttons">
+    <a class="btn" href="/inscripcion">Inscribite</a>
+    <a class="btn btn-secondary" href="/fixture">Ver fixture</a>
+  </div>
+</section>
+
+<section>
+  <h2>Últimas noticias</h2>
+
+  <% if (noticias.length === 0) { %>
+    <p>No hay noticias todavía.</p>
+  <% } %>
+
+  <div class="grid">
+    <% noticias.forEach(noticia => { %>
+      <div class="card">
+        <h3><%= noticia.titulo %></h3>
+        <p><%= noticia.resumen || 'Sin resumen' %></p>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
