@@ -11,7 +11,7 @@ const padresRoutes = require("./routes/padres");
 
 const app = express();
 
-//connectDB();
+connectDB();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
