@@ -168,20 +168,20 @@ router.get("/inscripcion", (req, res) => {
 // ===============================
 // INSCRIPCIÓN - ENVÍO
 // ===============================
+
+// POST guardar en Mongo
 router.post("/inscripcion", async (req, res) => {
   try {
-    // VERSIÓN CON MONGO:
-    // await Inscripcion.create(req.body);
-
-    // VERSIÓN SIN MONGO:
-    // Solo mostramos en consola lo que envía el formulario,
-    // para probar que funciona sin guardar en la base.
     console.log("Nueva inscripción recibida:", req.body);
+
+    const nueva = await Inscripcion.create(req.body);
+
+    console.log("Guardado en Mongo:", nueva);
 
     res.redirect("/inscripcion?ok=1");
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Error al enviar la inscripción");
+    console.error("Error al guardar inscripción:", error);
+    res.status(500).send("Error al guardar la inscripción");
   }
 });
 
