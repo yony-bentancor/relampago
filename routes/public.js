@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const Inscripcion = require("../models/Inscripcion");
 
 // ===============================
 // MODELOS MONGOOSE DESACTIVADOS
