@@ -7,8 +7,8 @@
     <p class="error"><%= error %></p>
   <% } %>
 
-  <form method="POST" action="/login" class="form-card">
-    <input type="email" name="email" placeholder="Email" required>
+<form method="POST" action="/auth/login" class="form-card">
+  <input type="email" name="email" placeholder="Email" required>
     <input type="password" name="password" placeholder="Contraseña" required>
     <button type="submit" class="btn">Entrar</button>
   </form>

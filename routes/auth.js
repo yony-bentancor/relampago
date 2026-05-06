@@ -90,4 +90,60 @@ router.get("/logout", (req, res) => {
   });
 });
 
+// FORMULARIO REGISTRO
+router.get("/register", (req, res) => {
+  res.render("public/register", { error: null });
+});
+
+// PROCESAR REGISTRO
+router.post("/register", async (req, res) => {
+  try {
+    const { nombre, apellido, email, password, telefono, cedula, direccion } =
+      req.body;
+
+    if (!nombre || !apellido || !email || !password) {
+      return res.render("public/register", {
+        error: "Nombre, apellido, email y contraseña son obligatorios",
+      });
+    }
+
+    const existe = await User.findOne({ email: email.toLowerCase().trim() });
+
+    if (existe) {
+      return res.render("public/register", {
+        error: "Ya existe un usuario con ese email",
+      });
+    }
+
+    const nuevoUser = new User({
+      nombre,
+      apellido,
+      email: email.toLowerCase().trim(),
+      password,
+      telefono,
+      cedula,
+      direccion,
+      rol: "socio",
+      activo: true,
+    });
+
+    await nuevoUser.save();
+
+    req.session.user = {
+      id: nuevoUser._id,
+      nombre: nuevoUser.nombre,
+      apellido: nuevoUser.apellido,
+      email: nuevoUser.email,
+      rol: nuevoUser.rol,
+    };
+
+    res.redirect("/socios/dashboard");
+  } catch (error) {
+    console.error("Error en registro:", error);
+    res.render("public/register", {
+      error: "Error al registrar usuario",
+    });
+  }
+});
+
 module.exports = router;

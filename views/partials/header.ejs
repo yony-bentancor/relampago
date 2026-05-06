@@ -2,11 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <title>Club Relámpago</title>
 
-  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/main.css"/>
 
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -34,6 +34,14 @@
       <a href="/fixture">Fixture</a>
       <a href="/noticias">Noticias</a>
 
+      <% if (!user) { %>
+
+        <a href="/socios/nuevo" class="btn-socio">
+          Hacete socio
+        </a>
+
+      <% } %>
+
       <!-- USUARIO LOGUEADO -->
       <% if (user) { %>
 
@@ -41,33 +49,65 @@
         <% if (user.rol === "socio") { %>
 
           <a href="/socios/dashboard">Mi Panel</a>
-          <a href="/jugadores/nuevo">Inscribir Jugador</a>
-          <a href="/cuotas/mis-cuotas">Cuotas</a>
+
+          <a href="/jugadores/nuevo">
+            Inscribir jugador
+          </a>
+
+          <a href="/cuotas/mis-cuotas">
+            Cuotas
+          </a>
 
         <% } %>
+
+
+        <a href="/auth/register" class="login-btn">
+  Registrarse
+</a>
 
         <!-- ADMIN -->
         <% if (user.rol === "admin") { %>
 
-          <a href="/admin">Admin</a>
-          <a href="/inscripciones/admin">Inscripciones</a>
-          <a href="/cuotas/admin">Cuotas</a>
+          <a href="/admin" class="admin-link">
+            Admin
+          </a>
+
+          <a href="/jugadores/admin">
+            Jugadores
+          </a>
+
+          <a href="/inscripciones/admin">
+            Inscripciones
+          </a>
+
+          <a href="/cuotas/admin">
+            Cuotas
+          </a>
 
         <% } %>
 
         <!-- ENTRENADOR -->
         <% if (user.rol === "entrenador") { %>
 
-          <a href="/entrenador/dashboard">Entrenador</a>
+          <a href="/entrenador/dashboard">
+            Entrenador
+          </a>
 
         <% } %>
 
         <!-- TESORERO -->
         <% if (user.rol === "tesorero") { %>
 
-          <a href="/cuotas/admin">Tesorería</a>
+          <a href="/cuotas/admin">
+            Tesorería
+          </a>
 
         <% } %>
+
+        <!-- USER -->
+        <span class="user-badge">
+          👤 <%= user.nombre || user.email %>
+        </span>
 
         <!-- LOGOUT -->
         <a href="/auth/logout" class="logout-btn">
@@ -76,7 +116,7 @@
 
       <% } else { %>
 
-        <!-- NO LOGUEADO -->
+        <!-- LOGIN -->
         <a href="/auth/login" class="login-btn">
           Iniciar sesión
         </a>
