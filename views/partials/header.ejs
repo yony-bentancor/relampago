@@ -1,38 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Club Relámpago</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/main.css">
+
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="container nav">
-      <a href="/" class="logo"><img src="/img/rela.jpg"> </a>
 
-      <nav>
-        <a href="/">Inicio</a>
-        <a href="/categorias">Categorías</a>
-        <a href="/fixture">Fixture</a>
-        <a href="/noticias">Noticias</a>
-        <a href="/inscripcion">Inscripción</a>
+<header class="main-header">
 
-        <% if (user) { %>
-          <% if (user.rol === 'admin') { %>
-            <a href="/admin">Admin</a>
-          <% } %>
+  <div class="container header-container">
 
-          <% if (user.rol === 'padre') { %>
-            <a href="/padres/dashboard">Mi panel</a>
-          <% } %>
+    <!-- LOGO -->
+    <a href="/" class="logo">
+      ⚡ Relámpago
+    </a>
 
-          <a href="/logout">Salir</a>
-        <% } else { %>
-          <a href="/login">Ingresar</a>
+    <!-- MENU -->
+    <nav class="main-nav">
+
+      <!-- PUBLICO -->
+      <a href="/">Inicio</a>
+      <a href="/categorias">Categorías</a>
+      <a href="/fixture">Fixture</a>
+      <a href="/noticias">Noticias</a>
+
+      <!-- USUARIO LOGUEADO -->
+      <% if (user) { %>
+
+        <!-- SOCIO -->
+        <% if (user.rol === "socio") { %>
+
+          <a href="/socios/dashboard">Mi Panel</a>
+          <a href="/jugadores/nuevo">Inscribir Jugador</a>
+          <a href="/cuotas/mis-cuotas">Cuotas</a>
+
         <% } %>
-      </nav>
-    </div>
-  </header>
 
-  <main class="container">
+        <!-- ADMIN -->
+        <% if (user.rol === "admin") { %>
+
+          <a href="/admin">Admin</a>
+          <a href="/inscripciones/admin">Inscripciones</a>
+          <a href="/cuotas/admin">Cuotas</a>
+
+        <% } %>
+
+        <!-- ENTRENADOR -->
+        <% if (user.rol === "entrenador") { %>
+
+          <a href="/entrenador/dashboard">Entrenador</a>
+
+        <% } %>
+
+        <!-- TESORERO -->
+        <% if (user.rol === "tesorero") { %>
+
+          <a href="/cuotas/admin">Tesorería</a>
+
+        <% } %>
+
+        <!-- LOGOUT -->
+        <a href="/auth/logout" class="logout-btn">
+          Salir
+        </a>
+
+      <% } else { %>
+
+        <!-- NO LOGUEADO -->
+        <a href="/auth/login" class="login-btn">
+          Iniciar sesión
+        </a>
+
+      <% } %>
+
+    </nav>
+
+  </div>
+
+</header>
+
+<main class="main-content">
