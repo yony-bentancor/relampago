@@ -119,3 +119,175 @@ body {
   color: green;
   font-weight: bold;
 }
+
+
+
+
+
+
+
+
+
+
+
+.form-page,
+.ficha-page {
+  padding: 30px;
+}
+
+.form-container,
+.ficha-card {
+  max-width: 1100px;
+  margin: auto;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+
+.form-header h1,
+.ficha-card h1 {
+  margin: 0;
+  color: #b83737;
+}
+
+.form-header p {
+  color: #666;
+  margin-top: 5px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full {
+  grid-column: 1/-1;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 15px;
+}
+
+.form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-actions {
+  margin-top: 30px;
+}
+
+.btn-save,
+.btn-edit {
+  background: #b83737;
+  color: white;
+  text-decoration: none;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.preview-foto,
+.foto-jugador {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 18px;
+  margin-bottom: 15px;
+}
+
+.ficha-top {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.foto-placeholder {
+  width: 180px;
+  height: 180px;
+  background: #b83737;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 60px;
+  font-weight: bold;
+}
+
+.info-section {
+  flex: 1;
+}
+
+.categoria-badge {
+  display: inline-block;
+  margin-top: 10px;
+  background: #ffe2e2;
+  color: #b83737;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.info-item {
+  background: #f7f7f7;
+  padding: 18px;
+  border-radius: 14px;
+}
+
+.info-item span {
+  display: block;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.observaciones-card {
+  margin-top: 30px;
+  background: #fafafa;
+  padding: 25px;
+  border-radius: 16px;
+}
+
+.acciones-ficha {
+  margin-top: 30px;
+}
+
+@media(max-width:768px){
+
+  .ficha-top {
+    flex-direction: column;
+  }
+
+  .form-page,
+  .ficha-page {
+    padding: 15px;
+  }
+
+}

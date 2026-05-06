@@ -1,0 +1,103 @@
+<%- include('../partials/header') %>
+
+<section class="ficha-page">
+
+  <div class="ficha-card">
+
+    <div class="ficha-top">
+
+      <div class="foto-section">
+
+        <% if (jugador.foto) { %>
+
+          <img
+            src="<%= jugador.foto %>"
+            class="foto-jugador"
+          >
+
+        <% } else { %>
+
+          <div class="foto-placeholder">
+            <%= jugador.nombre.charAt(0).toUpperCase() %>
+          </div>
+
+        <% } %>
+
+      </div>
+
+      <div class="info-section">
+
+        <h1>
+          <%= jugador.nombre %>
+          <%= jugador.apellido %>
+        </h1>
+
+        <div class="categoria-badge">
+          <%= jugador.categoria?.nombre || 'Sin categoría' %>
+        </div>
+
+        <div class="info-grid">
+
+          <div class="info-item">
+            <span>Fecha nacimiento</span>
+            <strong>
+              <%= jugador.fechaNacimiento
+                ? new Date(jugador.fechaNacimiento).toLocaleDateString('es-UY')
+                : 'Sin dato'
+              %>
+            </strong>
+          </div>
+
+          <div class="info-item">
+            <span>Mutualista</span>
+            <strong>
+              <%= jugador.mutualista || 'Sin dato' %>
+            </strong>
+          </div>
+
+          <div class="info-item">
+            <span>Ficha médica</span>
+            <strong>
+              <%= jugador.fichaMedica || 'Sin dato' %>
+            </strong>
+          </div>
+
+          <div class="info-item">
+            <span>Responsable</span>
+            <strong>
+              <%= jugador.responsable?.nombre || 'Sin responsable' %>
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="observaciones-card">
+
+      <h3>Observaciones</h3>
+
+      <p>
+        <%= jugador.observaciones || 'Sin observaciones registradas.' %>
+      </p>
+
+    </div>
+
+    <div class="acciones-ficha">
+
+      <a
+        href="/jugadores/<%= jugador._id %>/editar"
+        class="btn-edit"
+      >
+        Editar
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+<%- include('../partials/footer') %>

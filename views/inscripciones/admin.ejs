@@ -1,0 +1,95 @@
+<%- include('../partials/header') %>
+
+<section class="admin-page">
+
+  <div class="page-header">
+    <div>
+      <h1>Administrar Jugadores</h1>
+      <p>Listado completo de jugadores registrados.</p>
+    </div>
+
+    <a href="/jugadores/nuevo" class="btn-primary">+ Nuevo jugador</a>
+  </div>
+
+  <div class="table-card">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Foto</th>
+          <th>Jugador</th>
+          <th>Categoría</th>
+          <th>Fecha nacimiento</th>
+          <th>Responsable</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if (jugadores && jugadores.length > 0) { %>
+
+          <% jugadores.forEach(jugador => { %>
+            <tr>
+              <td>
+                <% if (jugador.foto) { %>
+                  <img src="<%= jugador.foto %>" class="avatar-jugador" alt="Foto jugador">
+                <% } else { %>
+                  <div class="avatar-placeholder">
+                    <%= jugador.nombre ? jugador.nombre.charAt(0).toUpperCase() : '?' %>
+                  </div>
+                <% } %>
+              </td>
+
+              <td>
+                <strong><%= jugador.nombre %> <%= jugador.apellido || '' %></strong>
+              </td>
+
+              <td>
+                <%= jugador.categoria?.nombre || 'Sin categoría' %>
+              </td>
+
+              <td>
+                <%= jugador.fechaNacimiento
+                  ? new Date(jugador.fechaNacimiento).toLocaleDateString('es-UY')
+                  : 'Sin dato'
+                %>
+              </td>
+
+              <td>
+                <%= jugador.responsable?.nombre || 'Sin responsable' %>
+                <small><%= jugador.responsable?.email || '' %></small>
+              </td>
+
+              <td>
+                <span class="badge <%= jugador.activo ? 'badge-ok' : 'badge-off' %>">
+                  <%= jugador.activo ? 'Activo' : 'Inactivo' %>
+                </span>
+              </td>
+
+              <td class="acciones">
+                <a href="/jugadores/<%= jugador._id %>" class="btn-small">Ficha</a>
+                <a href="/jugadores/<%= jugador._id %>/editar" class="btn-small btn-edit">Editar</a>
+
+                <form action="/jugadores/<%= jugador._id %>/eliminar" method="POST" style="display:inline;">
+                  <button type="submit" class="btn-small btn-delete">
+                    Eliminar
+                  </button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+
+        <% } else { %>
+          <tr>
+            <td colspan="7" class="empty-table">
+              No hay jugadores registrados todavía.
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<%- include('../partials/footer') %>
