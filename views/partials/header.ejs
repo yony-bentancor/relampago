@@ -1,127 +1,41 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <title>Club  Atletico Relámpago</title>
-
-  <link rel="stylesheet" href="/css/main.css"/>
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
-</head>
-
-<body>
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
 
 <header class="main-header">
+  <div class="header-container">
 
-  <div class="container header-container">
+    <a href="/" class="brand">
+      <img src="/img/logo-relampago.png" alt="Club Atlético Relámpago" class="brand-logo">
 
-    <!-- LOGO -->
-    <a href="/" class="logo">
-      ⚡ Club  Atletico Relámpago
+      <div class="brand-text">
+        <span class="brand-title">Club Atlético Relámpago</span>
+        <span class="brand-subtitle">Baby Fútbol</span>
+      </div>
     </a>
 
-    <!-- MENU -->
     <nav class="main-nav">
-
-      <!-- PUBLICO -->
-      <a href="/">Inicio</a>
-      <a href="/categorias">Categorías</a>
-      <a href="/fixture">Fixture</a>
-      <a href="/noticias">Noticias</a>
-
-      <!-- USUARIO NO LOGUEADO -->
-      <% if (!user) { %>
-
-        <a href="/auth/register" class="btn-socio">
-          Hacete socio
-        </a>
-
-        <a href="/auth/login" class="login-btn">
-          Iniciar sesión
-        </a>
-
-      <% } %>
-
-      <!-- USUARIO LOGUEADO -->
-      <% if (user) { %>
-
-        <!-- SOCIO -->
-        <% if (user.rol === "socio") { %>
-
-          <a href="/socios/dashboard">
-            Mi Panel
-          </a>
-
-          <a href="/jugadores/nuevo">
-            Inscribir jugador
-          </a>
-
-          <a href="/cuotas/mis-cuotas">
-            Cuotas
-          </a>
-
-        <% } %>
-
-        <!-- ADMIN -->
-        <% if (user.rol === "admin") { %>
-
-          <a href="/admin" class="admin-link">
-            Admin
-          </a>
-
-          <a href="/jugadores/admin">
-            Jugadores
-          </a>
-
-          <a href="/inscripciones/admin">
-            Inscripciones
-          </a>
-
-          <a href="/cuotas/admin">
-            Cuotas
-          </a>
-
-        <% } %>
-
-        <!-- ENTRENADOR -->
-        <% if (user.rol === "entrenador") { %>
-
-          <a href="/entrenador/dashboard">
-            Entrenador
-          </a>
-
-        <% } %>
-
-        <!-- TESORERO -->
-        <% if (user.rol === "tesorero") { %>
-
-          <a href="/cuotas/admin">
-            Tesorería
-          </a>
-
-        <% } %>
-
-        <!-- USER -->
-        <span class="user-badge">
-          👤 <%= user.nombre || user.email %>
-        </span>
-
-        <!-- LOGOUT -->
-        <a href="/auth/logout" class="logout-btn">
-          Salir
-        </a>
-
-      <% } %>
-
+      <a href="/"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+      <a href="/categorias"><i class="fa-solid fa-trophy"></i><span>Categorías</span></a>
+      <a href="/fixture"><i class="fa-solid fa-calendar-days"></i><span>Fixture</span></a>
+      <a href="/noticias"><i class="fa-solid fa-newspaper"></i><span>Noticias</span></a>
+      <a href="/sponsors"><i class="fa-solid fa-handshake"></i><span>Sponsors</span></a>
     </nav>
 
+    <div class="header-actions">
+      <a href="/inscripcion" class="btn-socio">
+        <i class="fa-solid fa-user"></i>
+        Hacete socio
+      </a>
+
+      <a href="/auth/login" class="btn-login">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        Iniciar sesión
+      </a>
+    </div>
+
   </div>
-
 </header>
-
-<main class="main-content">
