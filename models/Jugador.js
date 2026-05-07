@@ -31,8 +31,7 @@ const jugadorSchema = new mongoose.Schema(
     },
 
     categoria: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Categoria",
+      type: String,
       required: true,
     },
 
