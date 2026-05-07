@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+
+<section class="form-section">
+  <h1>Registro de socio</h1>
+
+  <% if (error) { %>
+    <p class="error"><%= error %></p>
+  <% } %>
+
+  <form method="POST" action="/auth/register" class="form-card">
+    <input type="text" name="nombre" placeholder="Nombre" required>
+    <input type="text" name="apellido" placeholder="Apellido" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+
+    <input type="text" name="telefono" placeholder="Teléfono">
+    <input type="text" name="cedula" placeholder="Cédula">
+    <input type="text" name="direccion" placeholder="Dirección">
+
+    <button type="submit" class="btn">Crear cuenta</button>
+  </form>
+
+  <p>
+    ¿Ya tenés cuenta?
+    <a href="/auth/login">Ingresar</a>
+  </p>
+</section>
+
+<%- include('../partials/footer') %>

@@ -60,10 +60,13 @@
 
         <% } %>
 
+<% if (!user) { %>
 
-        <a href="/auth/register" class="login-btn">
-  Registrarse
-</a>
+  <a href="/auth/register" class="btn-socio">
+    Hacete socio
+  </a>
+
+<% } %>
 
         <!-- ADMIN -->
         <% if (user.rol === "admin") { %>
