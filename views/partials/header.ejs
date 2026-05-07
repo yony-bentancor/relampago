@@ -34,10 +34,15 @@
       <a href="/fixture">Fixture</a>
       <a href="/noticias">Noticias</a>
 
+      <!-- USUARIO NO LOGUEADO -->
       <% if (!user) { %>
 
-        <a href="/socios/nuevo" class="btn-socio">
+        <a href="/auth/register" class="btn-socio">
           Hacete socio
+        </a>
+
+        <a href="/auth/login" class="login-btn">
+          Iniciar sesión
         </a>
 
       <% } %>
@@ -48,7 +53,9 @@
         <!-- SOCIO -->
         <% if (user.rol === "socio") { %>
 
-          <a href="/socios/dashboard">Mi Panel</a>
+          <a href="/socios/dashboard">
+            Mi Panel
+          </a>
 
           <a href="/jugadores/nuevo">
             Inscribir jugador
@@ -59,14 +66,6 @@
           </a>
 
         <% } %>
-
-<% if (!user) { %>
-
-  <a href="/auth/register" class="btn-socio">
-    Hacete socio
-  </a>
-
-<% } %>
 
         <!-- ADMIN -->
         <% if (user.rol === "admin") { %>
@@ -115,13 +114,6 @@
         <!-- LOGOUT -->
         <a href="/auth/logout" class="logout-btn">
           Salir
-        </a>
-
-      <% } else { %>
-
-        <!-- LOGIN -->
-        <a href="/auth/login" class="login-btn">
-          Iniciar sesión
         </a>
 
       <% } %>
