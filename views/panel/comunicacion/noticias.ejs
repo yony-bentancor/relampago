@@ -1,0 +1,8 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Comunicación', titulo: 'Noticias', acciones: '<a class="btn pri sm" href="/panel/noticias/nueva">Nueva noticia</a>' }) %>
+<div class="card lista"><% noticias.forEach(n => { %>
+  <div class="li"><div style="min-width:0;flex:1 1 240px"><div class="eyebrow"><%= n.seccion %> · <%= fCorta(n.fecha) %></div><b><%= n.titulo %></b></div>
+    <div class="btns"><span class="chip <%= n.publicada === false ? 'neu' : 'ok' %>"><%= n.publicada === false ? 'Borrador' : 'Publicada' %></span><a class="btn sm" href="/panel/noticias/<%= n.id %>/editar">Editar</a>
+      <form method="post" action="/panel/noticias/<%= n.id %>/borrar" data-confirmar="¿Eliminar la noticia «<%= n.titulo %>»?"><button class="btn sm ghost">Eliminar</button></form></div></div>
+<% }) %><% if (!noticias.length) { %><p class="muted">Todavía no hay noticias.</p><% } %></div>
+<%- include('../../partials/panel-fin') %>

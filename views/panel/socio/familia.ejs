@@ -1,0 +1,21 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Mi familia', titulo: 'Hola, ' + usuario.nombre }) %>
+<% if (carnes.length || vencidas.length) { %><div class="grid" style="margin-bottom:16px">
+  <% carnes.forEach(({ j, e }) => { %><div class="aviso <%= e.clase %>"><div class="ic">!</div><div class="small"><b>Carné de salud de <%= j.nombre %>:</b> <%= e.texto.toLowerCase() %>. <%= e.clase === 'mal' ? 'No puede jugar hasta renovarlo.' : '' %> <a href="/panel/mis-jugadores#j-<%= j.id %>">Subir carné nuevo</a></div></div><% }) %>
+  <% if (vencidas.length) { %><div class="aviso mal"><div class="ic">$</div><div class="small"><b>Tenés <%= vencidas.length %> cuota<%= vencidas.length > 1 ? 's' : '' %> vencida<%= vencidas.length > 1 ? 's' : '' %> por <%= pesos(vencidas.reduce((t, q) => t + q.monto, 0)) %>.</b> <a href="/panel/mis-cuotas">Pagar</a></div></div><% } %>
+</div><% } %>
+<div class="grid g4" style="margin-bottom:16px">
+  <%- include('../../partials/kpi', { l: 'Jugadores', v: jugadores.length, s: jugadores.map(j => j.nombre).join(', ') || 'Inscribí a tu hijo' }) %>
+  <%- include('../../partials/kpi', { l: 'Cuotas', v: vencidas.length ? pesos(vencidas.reduce((t, q) => t + q.monto, 0)) : 'Al día', s: vencidas.length ? 'deuda vencida' : (pendientes.length ? 'Este mes: ' + pesos(pendientes.reduce((t, q) => t + q.monto, 0)) + ', vence el ' + cfg.diaVencimiento : '') }) %>
+  <%- include('../../partials/kpi', { l: 'Socio', v: socio ? 'N.º ' + socio.nro : '—' }) %>
+</div>
+<% if (inscripciones.length) { %><div class="card" style="margin-bottom:16px"><h3>Mis inscripciones</h3><div class="lista"><% inscripciones.forEach(i => { %><div class="li"><span><%= i.nombre %> · <%= categoriasPorId[i.categoria] ? categoriasPorId[i.categoria].nombre : '' %></span><span class="chip <%= { pendiente: 'warn', 'en revisión': 'info', aprobada: 'ok', rechazada: 'mal' }[i.estado] %>"><%= i.estado %></span></div><% }) %></div></div><% } %>
+<div class="grid g2" style="align-items:start">
+  <div><h3 style="margin-bottom:10px">Próximos partidos</h3><div class="grid">
+    <% proximos.forEach(p => { const cv = convs[p.id]; const mios = jugadores.filter(j => j.categoria === p.categoria);
+      const extra = cv ? mios.map(j => cv.jugadores.includes(j.id) ? '<span class="chip ok">' + esc(j.nombre) + ' convocado</span>' : '<span class="chip neu">' + esc(j.nombre) + ' no convocado</span>').join('') : '<span class="chip neu">Convocatoria pendiente</span>'; %>
+      <%- include('../../partials/partido', { p, extra }) %>
+    <% }) %><% if (!proximos.length) { %><div class="empty">Sin partidos programados.</div><% } %></div></div>
+  <div><h3 style="margin-bottom:10px">Comunicados</h3><div class="card lista"><% comunicados.forEach(m => { %><%- include('../../partials/comunicado', { m }) %><% }) %><% if (!comunicados.length) { %><p class="small muted">No hay comunicados.</p><% } %></div></div>
+</div>
+<%- include('../../partials/panel-fin') %>

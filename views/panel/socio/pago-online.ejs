@@ -1,0 +1,10 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Cuotas', titulo: 'Pago online' }) %>
+<form class="card form" method="post" action="/panel/mis-cuotas/pagar" style="max-width:620px">
+  <div class="aviso info"><div class="ic">i</div><p class="small">Pago simulado: en este prototipo no se cobra nada ni se piden datos de tarjeta. En el sistema real este paso abre Mercado Pago.</p></div>
+  <div class="eyebrow">Cuotas a pagar</div>
+  <% cuotas.forEach(q => { %><label class="check"><input type="checkbox" name="cuotas" value="<%= q.id %>" checked><span><%= nombreMes(q) %> · <%= jugadores[q.jugador] ? jugadores[q.jugador].nombre : '' %> · <b class="num"><%= pesos(q.monto) %></b> <% if (q.estado === 'vencida') { %><span class="chip mal plain">Vencida</span><% } %></span></label><% }) %>
+  <div class="li" style="margin-top:6px"><b>Total</b><b class="num" style="font-family:var(--f-disp);font-size:1.5rem"><%= pesos(cuotas.reduce((t, q) => t + q.monto, 0)) %></b></div>
+  <div class="btns"><button class="btn pri">Pagar ahora</button><a class="btn ghost" href="/panel/mis-cuotas">Cancelar</a></div>
+</form>
+<%- include('../../partials/panel-fin') %>

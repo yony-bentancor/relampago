@@ -1,30 +1,32 @@
-const mongoose = require("mongoose");
+/*
+ * Partido del fixture (incluye los partidos entre rivales para calcular la tabla).
+ * Campos: id, temporada, categoria, fecha (número de fecha o "Amistoso"), dia (AAAA-MM-DD),
+ *         hora, local, visitante, gl, gv (goles), jugado, cancha, cargadoPor
+ */
+const Modelo = require("./Modelo");
 
-const partidoSchema = new mongoose.Schema(
-  {
-    categoria: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Categoria",
-      required: true,
-    },
-    rival: { type: String, required: true },
-    fecha: { type: Date, required: true },
-    hora: String,
-    cancha: String,
-    condicion: {
-      type: String,
-      enum: ["local", "visitante"],
-      default: "local",
-    },
-    resultadoRelampago: Number,
-    resultadoRival: Number,
-    estado: {
-      type: String,
-      enum: ["programado", "jugado", "suspendido"],
-      default: "programado",
-    },
-  },
-  { timestamps: true },
-);
+const CLUB = "Relámpago";
 
-module.exports = mongoose.model("Partido", partidoSchema);
+class Partido extends Modelo {
+  static coleccion = "partidos";
+  static prefijo = "p";
+  static CLUB = CLUB;
+
+  static esDelClub(p) { return p.local === CLUB || p.visitante === CLUB; }
+
+  static async delClub(categoriaId, temporada, jugado) {
+    const ps = await this.todos((p) => p.categoria === categoriaId && p.temporada === temporada && this.esDelClub(p) &&
+      (jugado === undefined || p.jugado === jugado));
+    return ps.sort((a, b) => (jugado ? b.dia.localeCompare(a.dia) : a.dia.localeCompare(b.dia)));
+  }
+
+  static resultadoClub(p) {
+    if (!p.jugado) return null;
+    const dif = p.local === CLUB ? p.gl - p.gv : p.gv - p.gl;
+    return dif > 0 ? "gano" : dif < 0 ? "perdio" : "empato";
+  }
+
+  static rival(p) { return p.local === CLUB ? p.visitante : p.local; }
+}
+
+module.exports = Partido;

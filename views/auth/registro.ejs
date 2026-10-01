@@ -1,0 +1,11 @@
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap" style="max-width:680px"><form class="card form" method="post" action="/registro" novalidate>
+  <div class="eyebrow">Cualquier persona puede registrarse</div><h2>Crear mi cuenta</h2>
+  <% if (typeof errores !== 'undefined' && errores.length) { %><div class="aviso mal"><div class="ic">!</div><ul class="small" style="margin:0;padding-left:16px"><% errores.forEach(e => { %><li><%= e %></li><% }) %></ul></div><% } %>
+  <div class="row"><label class="f" for="rg-n">Nombre<input class="in" id="rg-n" name="nombre" required value="<%= datos.nombre || '' %>" autocomplete="given-name"></label><label class="f" for="rg-a">Apellido<input class="in" id="rg-a" name="apellido" required value="<%= datos.apellido || '' %>" autocomplete="family-name"></label></div>
+  <div class="row"><label class="f" for="rg-e">Correo<input class="in" id="rg-e" name="email" type="email" required value="<%= datos.email || '' %>" autocomplete="email" inputmode="email"></label><label class="f" for="rg-t">Celular<input class="in" id="rg-t" name="telefono" placeholder="09X XXX XXX" value="<%= datos.telefono || '' %>" autocomplete="tel" inputmode="tel"></label></div>
+  <label class="f" for="rg-v">Vínculo con el club<select class="in" id="rg-v" name="vinculo"><% ['Madre','Padre','Responsable','Familiar','Socio colaborador'].forEach(v => { %><option <%= datos.vinculo === v ? 'selected' : '' %>><%= v %></option><% }) %></select></label>
+  <div class="row"><label class="f" for="rg-p">Contraseña<input class="in" id="rg-p" name="clave" type="password" required minlength="6" autocomplete="new-password"><span class="ayuda">Al menos 6 caracteres.</span></label><label class="f" for="rg-p2">Repetí la contraseña<input class="in" id="rg-p2" name="clave2" type="password" required autocomplete="new-password"></label></div>
+  <label class="check"><input type="checkbox" name="acepto" value="1" required <%= datos.acepto ? 'checked' : '' %>><span>Acepto el reglamento del club y el tratamiento de mis datos para la gestión de socios.</span></label>
+  <div><button class="btn pri">Crear cuenta</button></div></form></div></section>
+<%- include('../partials/footer') %>

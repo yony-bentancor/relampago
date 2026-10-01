@@ -1,0 +1,18 @@
+module.exports = {
+  Usuario: require("./Usuario"),
+  Socio: require("./Socio"),
+  Jugador: require("./Jugador"),
+  Categoria: require("./Categoria"),
+  Partido: require("./Partido"),
+  Entrenamiento: require("./Entrenamiento"),
+  Convocatoria: require("./Convocatoria"),
+  Cuota: require("./Cuota"),
+  Inscripcion: require("./Inscripcion"),
+  Comunicado: require("./Comunicado"),
+  Noticia: require("./Noticia"),
+  Producto: require("./Producto"),
+  Pedido: require("./Pedido"),
+  Notificacion: require("./Notificacion"),
+  Temporada: require("./Temporada"),
+  Config: require("./Config"),
+};

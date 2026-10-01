@@ -1,0 +1,10 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Entrenador', titulo: cat.nombre, acciones: include('../../partials/exportar', { tipo: 'plantel', params: 'cat=' + cat.id }) }) %>
+<%- include('../../partials/pestanias', { cats, sel: cat.id, base: '/panel/plantel' }) %>
+<% if (alertas.length) { %><div class="aviso warn" style="margin-bottom:14px"><div class="ic">!</div><div class="small"><b><%= alertas.length %> jugador<%= alertas.length > 1 ? 'es' : '' %> con documentación para revisar:</b> <%= alertas.map(f => f.j.nombre + ' ' + f.j.apellido + ' (' + (f.carne.clase !== 'ok' ? 'carné: ' + f.carne.texto.toLowerCase() : 'falta documentación') + ')').join(', ') %>.</div></div><% } %>
+<p class="small muted" style="margin-bottom:10px"><%= cat.entreno %> · partidos los sábados <%= cat.hora %> · <%= filas.length %> jugadores</p>
+<div class="grid g3"><% filas.forEach(({ j, asis, carne, edad }) => { %>
+  <a class="card click" href="/panel/jugadores/<%= j.id %>" style="text-decoration:none;color:inherit"><div class="persona"><%- include('../../partials/cami', { n: j.camiseta }) %><div class="t"><b><%= j.nombre %> <%= j.apellido %></b><span class="small muted"><%= j.posicion %> · <%= edad %> años</span></div></div>
+    <div class="btns" style="margin-top:10px"><span class="chip <%= asis.porcentaje >= 80 ? 'ok' : asis.porcentaje >= 65 ? 'warn' : 'mal' %> plain">Asistencia <%= asis.porcentaje %>%</span><% if (carne.clase !== 'ok') { %><span class="chip <%= carne.clase %> plain">Carné</span><% } %><% if (j.medica && j.medica.observaciones) { %><span class="chip info plain">Nota médica</span><% } %><% if (!j.autorizaImagen) { %><span class="chip warn plain">Sin fotos</span><% } %></div></a>
+<% }) %></div>
+<%- include('../../partials/panel-fin') %>

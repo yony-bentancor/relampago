@@ -1,0 +1,15 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Cantina', titulo: titulo }) %>
+<form class="card form" method="post" enctype="multipart/form-data" style="max-width:620px">
+  <label class="f" for="pp-n">Nombre<input class="in" id="pp-n" name="nombre" required maxlength="80" value="<%= p.nombre %>"></label>
+  <div class="row"><label class="f" for="pp-r">Rubro<select class="in" id="pp-r" name="rubro"><% rubros.forEach(r => { %><option <%= p.rubro === r ? 'selected' : '' %>><%= r %></option><% }) %></select></label>
+    <label class="f" for="pp-p">Precio ($U)<input class="in num" id="pp-p" name="precio" type="number" min="0" required value="<%= p.precio %>" inputmode="numeric"></label>
+    <label class="f" for="pp-s">Stock<input class="in num" id="pp-s" name="stock" type="number" min="0" required value="<%= p.stock %>" inputmode="numeric"></label></div>
+  <div class="eyebrow">Foto</div>
+  <% if (p.foto) { %><div class="btns"><img src="<%= p.foto %>" alt="" style="width:120px;border-radius:8px"><label class="check"><input type="checkbox" name="quitarFoto" value="1"><span>Quitar la foto</span></label></div><% } %>
+  <div class="drop"><span class="nombre-archivo"><%= p.foto ? 'Cambiar la foto' : 'Foto del producto (opcional)' %></span><input type="file" name="foto" accept="image/*" aria-label="Foto del producto"></div>
+  <label class="check"><input type="hidden" name="activo" value="0"><input type="checkbox" name="activo" value="1" <%= p.activo ? 'checked' : '' %>><span>A la venta en la cantina online</span></label>
+  <div class="btns"><button class="btn pri">Guardar</button><a class="btn ghost" href="/panel/cantina/productos">Cancelar</a></div>
+</form>
+<% if (p.id) { %><form method="post" action="/panel/cantina/productos/<%= p.id %>/borrar" data-confirmar="¿Quitar «<%= p.nombre %>» de la cantina?" style="margin-top:12px"><button class="btn ghost sm">Quitar producto</button></form><% } %>
+<%- include('../../partials/panel-fin') %>

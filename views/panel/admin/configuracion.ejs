@@ -1,0 +1,13 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Administración', titulo: 'Configuración' }) %>
+<form class="card form" method="post" action="/panel/configuracion" style="max-width:760px">
+  <div class="row"><label class="f" for="cf-n">Nombre del club<input class="in" id="cf-n" name="club" value="<%= cfg.club %>"></label><label class="f">Temporada actual<input class="in" value="<%= cfg.temporada %>" disabled></label></div>
+  <div class="eyebrow" style="margin-top:6px">Cuotas</div>
+  <div class="row"><label class="f" for="cf-c">Cuota mensual por jugador ($U)<input class="in num" id="cf-c" name="cuota" type="number" min="0" value="<%= cfg.cuota %>"></label><label class="f" for="cf-h">Cuota para hermanos ($U)<input class="in num" id="cf-h" name="cuotaHermano" type="number" min="0" value="<%= cfg.cuotaHermano %>"></label><label class="f" for="cf-v">Día de vencimiento<input class="in num" id="cf-v" name="diaVencimiento" type="number" min="1" max="28" value="<%= cfg.diaVencimiento %>"></label></div>
+  <label class="f" for="cf-t">Cuenta para transferencias<input class="in" id="cf-t" name="cuentaTransferencia" value="<%= cfg.cuentaTransferencia %>"></label>
+  <div class="eyebrow" style="margin-top:6px">Avisos</div>
+  <label class="f" for="cf-a" style="max-width:260px">Aviso de carné de salud (días antes)<input class="in num" id="cf-a" name="avisoCarneDias" type="number" min="1" max="120" value="<%= cfg.avisoCarneDias %>"></label>
+  <div class="eyebrow" style="margin-top:6px">Contacto (se muestra en la web)</div>
+  <div class="row"><label class="f" for="cf-d">Dirección<input class="in" id="cf-d" name="direccion" value="<%= cfg.direccion %>"></label><label class="f" for="cf-te">Teléfono<input class="in" id="cf-te" name="telefono" value="<%= cfg.telefono %>"></label><label class="f" for="cf-e">Correo<input class="in" id="cf-e" name="email" value="<%= cfg.email %>"></label></div>
+  <div><button class="btn pri">Guardar cambios</button></div></form>
+<%- include('../../partials/panel-fin') %>

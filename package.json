@@ -1,22 +1,22 @@
 {
-  "name": "relampago-web",
-  "version": "1.0.0",
-  "description": "Web del Club Relámpago",
+  "name": "club-relampago",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Web pública y sistema de gestión del Club Atlético Relámpago (baby fútbol)",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "seed": "node scripts/seed.js"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
-    "bcrypt": "^6.0.0",
-    "bcryptjs": "^2.4.3",
+    "busboy": "^1.6.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
-    "express-session": "^1.18.1",
-    "mongoose": "^8.23.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
+    "express-session": "^1.18.1"
   }
 }

@@ -1,118 +1,46 @@
-const mongoose = require("mongoose");
+/*
+ * Jugador: la ficha del niño o niña.
+ * Campos: id, nombre, apellido, nacimiento, ci, categoria, socio, camiseta, posicion,
+ *         carneVence, autorizaImagen, alta, activo,
+ *         docs { cedula, carne, autorizacion, fichaMedica } -> cada uno { archivo, nombreOriginal, fecha } o true/false en los datos de prueba
+ *         medica { observaciones, grupoSanguineo, prestador, emergenciaMovil }  (información sensible)
+ *         observaciones [ { fecha, texto, autor } ]
+ */
+const Modelo = require("./Modelo");
+const { hoy, diasEntre, fechaLarga } = require("../services/fechas");
 
-const jugadorSchema = new mongoose.Schema(
-  {
-    nombre: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+class Jugador extends Modelo {
+  static coleccion = "jugadores";
+  static prefijo = "j";
 
-    apellido: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+  static async deCategoria(categoriaId) {
+    const js = await this.todos((j) => j.categoria === categoriaId && j.activo !== false);
+    return js.sort((a, b) => a.camiseta - b.camiseta);
+  }
 
-    fechaNacimiento: {
-      type: Date,
-      required: true,
-    },
+  static async deSocio(socioId) { return this.todos((j) => j.socio === socioId && j.activo !== false); }
 
-    cedula: {
-      type: String,
-      trim: true,
-      default: "",
-    },
+  static nombreCompleto(j) { return `${j.nombre} ${j.apellido}`; }
 
-    foto: {
-      type: String,
-      default: "",
-    },
+  static edad(j) {
+    const n = new Date(j.nacimiento + "T12:00:00"), h = new Date(hoy() + "T12:00:00");
+    let a = h.getFullYear() - n.getFullYear();
+    if (h < new Date(h.getFullYear(), n.getMonth(), n.getDate(), 12)) a--;
+    return a;
+  }
 
-    categoria: {
-      type: String,
-      required: true,
-    },
+  /** Estado del carné de salud: { clase: ok|warn|mal, texto, dias } */
+  static estadoCarne(j, diasAviso = 30) {
+    if (!j.carneVence) return { clase: "mal", texto: "Sin carné", dias: -1 };
+    const d = diasEntre(hoy(), j.carneVence);
+    if (d < 0) return { clase: "mal", texto: `Vencido hace ${-d} día${d === -1 ? "" : "s"}`, dias: d };
+    if (d <= diasAviso) return { clase: "warn", texto: d === 0 ? "Vence hoy" : `Vence en ${d} día${d === 1 ? "" : "s"}`, dias: d };
+    return { clase: "ok", texto: `Vigente hasta ${fechaLarga(j.carneVence)}`, dias: d };
+  }
 
-    responsables: [
-      {
-        usuario: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
-        },
+  static docsCompletos(j) {
+    return ["cedula", "carne", "autorizacion", "fichaMedica"].every((k) => !!(j.docs && j.docs[k]));
+  }
+}
 
-        parentesco: {
-          type: String,
-          enum: ["padre", "madre", "tutor", "otro"],
-          required: true,
-        },
-
-        principal: {
-          type: Boolean,
-          default: false,
-        },
-      },
-    ],
-
-    datosMedicos: {
-      mutualista: {
-        type: String,
-        trim: true,
-        default: "",
-      },
-
-      emergenciaMovil: {
-        type: String,
-        trim: true,
-        default: "",
-      },
-
-      numeroEmergencia: {
-        type: String,
-        trim: true,
-        default: "",
-      },
-
-      alergias: {
-        type: String,
-        trim: true,
-        default: "",
-      },
-
-      medicacion: {
-        type: String,
-        trim: true,
-        default: "",
-      },
-
-      enfermedades: {
-        type: String,
-        trim: true,
-        default: "",
-      },
-
-      observaciones: {
-        type: String,
-        trim: true,
-        default: "",
-      },
-    },
-
-    observaciones: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-
-    estado: {
-      type: String,
-      enum: ["pendiente", "activo", "inactivo", "baja"],
-      default: "pendiente",
-    },
-  },
-  { timestamps: true },
-);
-
-module.exports = mongoose.model("Jugador", jugadorSchema);
+module.exports = Jugador;

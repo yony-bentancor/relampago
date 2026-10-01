@@ -1,0 +1,22 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Entrenador', titulo: 'Asistencia · ' + cat.nombre, acciones: (tomar ? '' : '<a class="btn pri sm" href="/panel/asistencia?cat=' + cat.id + '&tomar=1">Tomar lista de hoy</a>') + include('../../partials/exportar', { tipo: 'asistencia', params: 'cat=' + cat.id }) }) %>
+<%- include('../../partials/pestanias', { cats, sel: cat.id, base: '/panel/asistencia' }) %>
+<% if (tomar) { const marc = delDia ? delDia.asistencia : {}; %>
+<form class="card" method="post" action="/panel/asistencia" style="margin-bottom:16px;border-color:var(--rojo)">
+  <input type="hidden" name="cat" value="<%= cat.id %>">
+  <div class="btns" style="justify-content:space-between"><h3>Lista del <%= fCorta(dia) %></h3><span class="small muted"><span data-contador="presentes">0</span> de <%= jugadores.length %> presentes</span></div>
+  <label class="f" for="as-dia" style="max-width:220px;margin-top:8px">Día<input class="in" type="date" id="as-dia" name="dia" value="<%= dia %>" max="<%= hoy %>"></label>
+  <div class="grid g3" style="margin-top:10px"><% jugadores.forEach(j => { %><label class="check card" style="padding:12px;align-items:center"><input type="checkbox" name="presentes" value="<%= j.id %>" <%= marc[j.id] ? 'checked' : '' %>><span><%= j.nombre %> <%= j.apellido %></span></label><% }) %></div>
+  <label class="check" style="margin-top:12px"><input type="checkbox" name="suspendido" value="1" <%= delDia && delDia.suspendido ? 'checked' : '' %>><span>El entrenamiento se suspendió (por lluvia u otro motivo)</span></label>
+  <div class="btns" style="margin-top:12px"><button class="btn pri">Guardar asistencia</button><button type="button" class="btn sm" data-marcar-todos="presentes">Marcar todos</button><a class="btn ghost sm" href="/panel/asistencia?cat=<%= cat.id %>">Cancelar</a></div>
+</form>
+<% } %>
+<p class="small muted" style="margin-bottom:8px">Cada cuadro es un entrenamiento (verde: presente, gris: ausente, rayado: suspendido). Tocá un nombre para ver su ficha.</p>
+<div class="tbl-wrap"><table><thead><tr><th>Jugador</th><th>Últimos <%= ents.length %> entrenamientos</th><th class="r">Asistió</th></tr></thead><tbody>
+<% jugadores.forEach(j => { const val = ents.filter(e => !e.suspendido && j.id in e.asistencia), pres = val.filter(e => e.asistencia[j.id]).length; %>
+  <tr><td><a class="persona" href="/panel/jugadores/<%= j.id %>" style="text-decoration:none;color:inherit"><%- include('../../partials/cami', { n: j.camiseta }) %><b><%= j.nombre %> <%= j.apellido %></b></a></td>
+  <td><div class="asis"><% ents.forEach(e => { %><i class="<%= e.suspendido ? 'sus' : e.asistencia[j.id] ? '' : 'no' %>" title="<%= fCorta(e.dia) %>: <%= e.suspendido ? 'suspendido' : e.asistencia[j.id] ? 'presente' : 'ausente' %>"></i><% }) %></div></td>
+  <td class="r num"><b><%= pres %>/<%= val.length %></b></td></tr>
+<% }) %></tbody></table></div>
+<p class="small" style="margin-top:10px">¿Te olvidaste de un día? <a href="/panel/asistencia?cat=<%= cat.id %>&dia=<%= ents.length ? ents[ents.length - 1].dia : hoy %>">Editar el último entrenamiento</a></p>
+<%- include('../../partials/panel-fin') %>

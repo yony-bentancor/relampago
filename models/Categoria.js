@@ -1,15 +1,23 @@
-const mongoose = require("mongoose");
+/*
+ * Categoría: un año de nacimiento (por ejemplo Relámpago 2016).
+ * Campos: id, anio, nombre, entrenador (id de Usuario), delegado (id de Usuario),
+ *         hora (partidos de los sábados), entreno (días y horario), activa
+ */
+const Modelo = require("./Modelo");
 
-const categoriaSchema = new mongoose.Schema(
-  {
-    nombre: { type: String, required: true },
-    anio: Number,
-    horario: String,
-    diasEntrenamiento: [String],
-    descripcion: String,
-    foto: String,
-  },
-  { timestamps: true },
-);
+class Categoria extends Modelo {
+  static coleccion = "categorias";
+  static prefijo = "c";
 
-module.exports = mongoose.model("Categoria", categoriaSchema);
+  static async activas() {
+    const cs = await this.todos((c) => c.activa !== false);
+    return cs.sort((a, b) => a.anio - b.anio);
+  }
+
+  static async deEntrenador(usuarioId) {
+    const cs = await this.todos((c) => c.activa !== false && c.entrenador === usuarioId);
+    return cs.sort((a, b) => a.anio - b.anio);
+  }
+}
+
+module.exports = Categoria;

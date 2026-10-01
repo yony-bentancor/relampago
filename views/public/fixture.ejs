@@ -1,18 +1,18 @@
-<%- include('../partials/header') %>
-
-<h1>Fixture</h1>
-
-<div class="grid">
-  <% partidos.forEach(partido => { %>
-    <div class="card">
-      <h3><%= partido.categoria?.nombre || 'Sin categoría' %></h3>
-      <p><strong>Rival:</strong> <%= partido.rival %></p>
-      <p><strong>Fecha:</strong> <%= new Date(partido.fecha).toLocaleDateString('es-UY') %></p>
-      <p><strong>Hora:</strong> <%= partido.hora || 'A confirmar' %></p>
-      <p><strong>Cancha:</strong> <%= partido.cancha || 'A confirmar' %></p>
-      <p><strong>Estado:</strong> <%= partido.estado %></p>
-    </div>
-  <% }) %>
-</div>
-
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap">
+  <div class="sec-h"><div><div class="eyebrow">Temporada <%= cfg.temporada %></div><h1>Fixture</h1></div>
+    <div class="tabs" style="margin:0"><% [['proximos','Próximos'],['resultados','Resultados'],['tabla','Tabla de posiciones'],['fechas','Todas las fechas']].forEach(([k, l]) => { %><a class="<%= vista === k ? 'on' : '' %>" href="/fixture?vista=<%= k %>&cat=<%= sel.id %>"><%= l %></a><% }) %></div></div>
+  <%- include('../partials/pestanias', { cats, sel: sel.id, base: '/fixture?vista=' + vista }) %>
+  <% if (vista === 'tabla') { %>
+    <%- include('../partials/tabla', { filas: tabla, compacta: false }) %>
+    <div class="btns" style="margin-top:10px"><%- include('../partials/exportar', { tipo: 'tabla', params: 'cat=' + sel.id }) %></div>
+  <% } else if (vista === 'fechas') { %>
+    <div class="grid g2"><% fechas.forEach(([f, ps]) => { %>
+      <div class="card"><div class="btns" style="justify-content:space-between"><b><%= isNaN(f) ? f : 'Fecha ' + f %></b><span class="small muted"><%= fCorta(ps[0].dia) %></span></div>
+      <div class="lista" style="margin-top:6px"><% ps.forEach(p => { const nuestro = p.local === 'Relámpago' || p.visitante === 'Relámpago'; %><div class="li num" style="<%= nuestro ? 'font-weight:700' : '' %>;flex-wrap:nowrap"><span style="flex:1;min-width:0"><%= p.local %></span><span><%= p.jugado ? p.gl + ' – ' + p.gv : 'vs' %></span><span style="flex:1;text-align:right;min-width:0"><%= p.visitante %></span></div><% }) %></div></div>
+    <% }) %></div>
+  <% } else { %>
+    <% if (partidos.length) { %><div class="grid g3"><% partidos.forEach(p => { %><%- include('../partials/partido', { p }) %><% }) %></div><% } else { %><div class="empty"><%= vista === 'resultados' ? 'Todavía no hay resultados.' : 'No quedan partidos por jugar.' %></div><% } %>
+  <% } %>
+</div></section>
 <%- include('../partials/footer') %>

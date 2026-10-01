@@ -1,72 +1,20 @@
-<header class="main-header"> <%- include('../partials/head') %>
-
-  <div class="header-container">
-
-    <a href="/" class="brand">
-
-      <img
-        src="/img/logo-relampago.png"
-        alt="Club Atlético Relámpago"
-        class="brand-logo"
-      >
-
-      <div class="brand-text">
-
-        <span class="brand-title">
-          Club Atlético Relámpago
-        </span>
-
-        <span class="brand-subtitle">
-          Baby Fútbol
-        </span>
-
-      </div>
-
-    </a>
-
-    <nav class="main-nav">
-
-      <a href="/">
-        <i class="fa-solid fa-house"></i>
-        <span>Inicio</span>
-      </a>
-
-      <a href="/categorias">
-        <i class="fa-solid fa-trophy"></i>
-        <span>Categorías</span>
-      </a>
-
-      <a href="/fixture">
-        <i class="fa-solid fa-calendar-days"></i>
-        <span>Fixture</span>
-      </a>
-
-      <a href="/noticias">
-        <i class="fa-solid fa-newspaper"></i>
-        <span>Noticias</span>
-      </a>
-
-      <a href="/sponsors">
-        <i class="fa-solid fa-handshake"></i>
-        <span>Sponsors</span>
-      </a>
-
-    </nav>
-
-    <div class="header-actions">
-
-      <a href="/auth/register" class="btn-socio">
-        <i class="fa-solid fa-user-plus"></i>
-        Registrarse
-      </a>
-
-      <a href="/auth/login" class="btn-login">
-        <i class="fa-solid fa-right-to-bracket"></i>
-        Iniciar sesión
-      </a>
-
-    </div>
-
+<% const PUB = [["/", "Inicio"], ["/club", "El club"], ["/categorias", "Categorías"], ["/fixture", "Fixture"], ["/noticias", "Noticias"], ["/galeria", "Galería"], ["/hacete-socio", "Hacete socio"], ["/contacto", "Contacto"]]; %>
+<a class="sr" href="#contenido">Ir al contenido</a>
+<header class="top<%= usuario ? ' con-sesion' : '' %>"><div class="wrap">
+  <a class="marca" href="/" aria-label="Club Relámpago, inicio"><img src="/img/escudo.jpg" alt=""><span>Club Relámpago</span></a>
+  <nav class="pub" id="menu-sitio" aria-label="Sitio">
+    <% PUB.forEach(([href, txt]) => { const on = href === "/" ? ruta === "/" : ruta.startsWith(href); %><a href="<%= href %>" class="<%= on ? 'on' : '' %>"<%- on ? ' aria-current="page"' : '' %>><%= txt %></a><% }) %>
+  </nav>
+  <div class="acc">
+    <% if (usuario) { %>
+      <% if (itemsCarrito) { %><a class="btn sm ocultar-movil" href="/panel/tienda">Carrito · <%= itemsCarrito %></a><% } %>
+      <a class="btn ghost sm campana" href="/panel/avisos" aria-label="Avisos<%= avisosSinLeer ? ', ' + avisosSinLeer + ' sin leer' : '' %>">Avisos<% if (avisosSinLeer) { %><span class="pto"><%= avisosSinLeer %></span><% } %></a>
+      <a class="btn <%= ruta.startsWith('/panel') ? 'osc' : 'pri' %> sm" href="/panel">Mi panel</a>
+      <form class="inline ocultar-movil" method="post" action="/salir"><button class="btn ghost sm">Salir</button></form>
+    <% } else { %>
+      <a class="btn sm ocultar-movil" href="/registro">Registrarme</a>
+      <a class="btn pri sm" href="/ingresar">Ingresar</a>
+    <% } %>
   </div>
-
-</header>
+  <button class="btn ghost sm menu-btn" type="button" data-menu aria-expanded="false" aria-controls="menu-sitio">Menú</button>
+</div></header>

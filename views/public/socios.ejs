@@ -1,0 +1,11 @@
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap grid g2" style="align-items:start">
+  <div><div class="eyebrow">Sumate al club</div><h1 style="margin:6px 0 14px">Hacete socio e inscribí a tu hijo</h1>
+    <p style="max-width:58ch">Creá tu cuenta, agregá a cada jugador con su ficha y adjuntá la documentación. La comisión revisa la solicitud y te avisa cuando está aprobada.</p>
+    <div class="lista" style="margin-top:18px"><% ['Registrate como socio','Agregá al jugador y completá su ficha','Elegí la categoría según el año de nacimiento','Subí la foto de la cédula, el carné de salud y la autorización','Esperá la aprobación del club'].forEach((t, i) => { %><div class="li" style="justify-content:flex-start;flex-wrap:nowrap"><span class="tag rojo"><%= i + 1 %></span><span><%= t %></span></div><% }) %></div>
+    <div class="btns" style="margin-top:18px"><% if (usuario) { %><a class="btn pri" href="/panel/inscribir">Inscribir un jugador</a><% } else { %><a class="btn pri" href="/registro">Crear mi cuenta</a><a class="btn" href="/ingresar">Ya tengo cuenta</a><% } %></div></div>
+  <div class="grid"><div class="card"><h3>Cuota mensual</h3><div class="kpi" style="padding:6px 0"><div class="v"><%= pesos(cfg.cuota) %></div><div class="s">por jugador · hermanos <%= pesos(cfg.cuotaHermano) %></div></div>
+    <p class="small muted">Se paga de marzo a noviembre y vence el día <%= cfg.diaVencimiento %> de cada mes. Podés pagar online, por transferencia o en la sede.</p></div>
+    <div class="card"><h3>Documentación</h3><ul style="margin:0;padding-left:18px"><li>Foto de la cédula del jugador</li><li>Carné de salud vigente (te avisamos antes de que venza)</li><li>Autorización de los padres para el uso de su imagen</li><li>Ficha médica y contacto de emergencia</li></ul></div></div>
+</div></section>
+<%- include('../partials/footer') %>

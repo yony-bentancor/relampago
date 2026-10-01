@@ -1,0 +1,12 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Para todos', titulo: 'Avisos y comunicados' }) %>
+<div class="grid g2" style="align-items:start">
+  <div class="card"><h3>Avisos para vos</h3>
+    <div class="lista"><% notificaciones.forEach(n => { %>
+      <div class="<%= sinLeer.has(n.id) ? '' : 'leida' %>"><div class="btns" style="justify-content:space-between"><span class="small muted"><%= fCorta(n.fecha) %> <%= fHora(n.fecha) %></span><% if (sinLeer.has(n.id)) { %><span class="chip info plain">Nuevo</span><% } %></div>
+        <p><%= n.texto %></p><% if (n.enlace) { %><a class="small" href="<%= n.enlace %>">Ver</a><% } %></div>
+    <% }) %>
+    <% if (!notificaciones.length) { %><p class="small muted">Acá aparecen los avisos personales: pagos registrados, convocatorias, vencimientos e inscripciones.</p><% } %></div></div>
+  <div class="card"><h3>Comunicados</h3><div class="lista"><% comunicados.forEach(m => { %><%- include('../../partials/comunicado', { m }) %><% }) %><% if (!comunicados.length) { %><p class="small muted">No hay comunicados.</p><% } %></div></div>
+</div>
+<%- include('../../partials/panel-fin') %>

@@ -1,0 +1,29 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Cantina online', titulo: 'Pedí y retirá sin hacer fila' }) %>
+<div class="grid tienda" style="grid-template-columns:minmax(0,1fr) minmax(0,300px);align-items:start">
+  <div>
+    <div class="tabs"><a class="<%= !rubro ? 'on' : '' %>" href="/panel/tienda">Todo</a><% rubros.forEach(r => { %><a class="<%= rubro === r ? 'on' : '' %>" href="/panel/tienda?rubro=<%= encodeURIComponent(r) %>"><%= r %></a><% }) %></div>
+    <div class="grid g4"><% productos.forEach(p => { const enCarrito = (items.find(i => i.p.id === p.id) || {}).cant || 0; %>
+      <div class="card prod" id="p-<%= p.id %>"><div class="img <%= p.rubro %>"><% if (p.foto) { %><img src="<%= p.foto %>" alt="" loading="lazy"><% } else { %><%= inicialesProducto(p) %><% } %></div>
+        <b><%= p.nombre %></b>
+        <div class="btns" style="justify-content:space-between;margin-top:auto"><span class="precio num"><%= pesos(p.precio) %></span>
+          <% if (p.stock === 0) { %><span class="chip mal plain">Agotado</span>
+          <% } else if (enCarrito) { %><span class="qty"><form method="post" action="/panel/tienda/carrito"><input type="hidden" name="producto" value="<%= p.id %>"><input type="hidden" name="cambio" value="-1"><input type="hidden" name="rubro" value="<%= rubro %>"><button aria-label="Quitar uno de <%= p.nombre %>">−</button></form><span class="num"><%= enCarrito %></span><form method="post" action="/panel/tienda/carrito"><input type="hidden" name="producto" value="<%= p.id %>"><input type="hidden" name="cambio" value="1"><input type="hidden" name="rubro" value="<%= rubro %>"><button aria-label="Agregar uno de <%= p.nombre %>">+</button></form></span>
+          <% } else { %><form method="post" action="/panel/tienda/carrito"><input type="hidden" name="producto" value="<%= p.id %>"><input type="hidden" name="cambio" value="1"><input type="hidden" name="rubro" value="<%= rubro %>"><button class="btn sm pri">Agregar</button></form><% } %>
+        </div></div>
+    <% }) %></div>
+  </div>
+  <div class="card carrito" id="carrito"><h3>Tu pedido</h3>
+    <% if (items.length) { %>
+      <div class="lista"><% items.forEach(i => { %><div class="li"><span class="small"><%= i.cant %> × <%= i.p.nombre %></span><b class="num small"><%= pesos(i.p.precio * i.cant) %></b></div><% }) %></div>
+      <div class="li" style="margin-top:10px"><b>Total</b><b class="num" style="font-family:var(--f-disp);font-size:1.4rem"><%= pesos(total) %></b></div>
+      <form method="post" action="/panel/tienda/comprar" class="form" style="margin-top:10px">
+        <label class="f" for="pago">Forma de pago<select class="in" id="pago" name="pago"><% pagos.forEach(p => { %><option><%= p %></option><% }) %></select></label>
+        <button class="btn pri" style="width:100%">Confirmar pedido</button></form>
+      <form method="post" action="/panel/tienda/vaciar"><button class="btn ghost sm" style="width:100%;margin-top:4px">Vaciar carrito</button></form>
+    <% } else { %><p class="small muted">Todavía no agregaste nada.</p><% } %>
+    <% if (misPedidos.length) { %><hr class="sep"><b class="small">Mis pedidos</b><div class="lista"><% misPedidos.forEach(o => { %><div class="li"><a class="small" href="/panel/tienda/pedido/<%= o.id %>">N.º <%= o.numero %> · <%= fCorta(o.fecha) %></a><span class="chip <%= o.estado === 'entregado' ? 'ok' : o.estado === 'listo' ? 'info' : 'warn' %>"><%= o.estado %></span></div><% }) %></div><% } %>
+  </div>
+</div>
+<% if (items.length) { %><div class="pie-carrito"><span><b><%= items.reduce((t, i) => t + i.cant, 0) %></b> productos · <b><%= pesos(total) %></b></span><a class="btn sm" href="#carrito">Ver pedido</a></div><% } %>
+<%- include('../../partials/panel-fin') %>

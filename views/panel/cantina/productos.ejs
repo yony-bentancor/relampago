@@ -1,0 +1,11 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Cantina', titulo: 'Productos', acciones: '<a class="btn pri sm" href="/panel/cantina/productos/nuevo">Agregar producto</a>' + include('../../partials/exportar', { tipo: 'productos' }) }) %>
+<div class="tabs"><a class="<%= !rubro ? 'on' : '' %>" href="/panel/cantina/productos">Todos (<%= total %>)</a><% rubros.forEach(r => { %><a class="<%= rubro === r ? 'on' : '' %>" href="/panel/cantina/productos?rubro=<%= encodeURIComponent(r) %>"><%= r %></a><% }) %></div>
+<div class="tbl-wrap tarjetas"><table><thead><tr><th>Producto</th><th>Rubro</th><th class="r">Precio</th><th class="r">Stock</th><th>A la venta</th><th></th></tr></thead><tbody>
+<% productos.forEach(p => { %><tr><td class="principal" data-l="Producto"><div class="persona"><div class="prod" style="width:44px"><div class="img <%= p.rubro %>" style="font-size:1rem"><% if (p.foto) { %><img src="<%= p.foto %>" alt=""><% } else { %><%= inicialesProducto(p) %><% } %></div></div><b><%= p.nombre %></b></div></td>
+  <td class="small" data-l="Rubro"><%= p.rubro %></td><td class="r num" data-l="Precio"><%= pesos(p.precio) %></td>
+  <td class="r num" data-l="Stock"><%- p.stock === 0 ? '<span class="chip mal">Sin stock</span>' : p.stock <= 5 ? '<span class="chip warn">' + p.stock + '</span>' : p.stock %></td>
+  <td data-l="A la venta"><form method="post" action="/panel/cantina/productos/<%= p.id %>/alternar"><input type="hidden" name="rubro" value="<%= rubro %>"><button class="btn sm <%= p.activo ? '' : 'ghost' %>"><%= p.activo ? 'Sí · ocultar' : 'No · mostrar' %></button></form></td>
+  <td class="r" data-l=""><a class="btn sm" href="/panel/cantina/productos/<%= p.id %>/editar">Editar</a></td></tr><% }) %>
+</tbody></table></div>
+<%- include('../../partials/panel-fin') %>

@@ -1,0 +1,3 @@
+<% if (flash) { %>
+<div class="wrap flash" data-auto role="status"><div class="aviso <%= flash.tipo === 'error' ? 'mal' : flash.tipo === 'ok' ? 'info' : flash.tipo === 'alerta' ? 'warn' : 'info' %>"><div class="ic"><%= flash.tipo === 'error' ? '!' : flash.tipo === 'ok' ? '✓' : 'i' %></div><p><%= flash.texto %></p></div></div>
+<% } %>

@@ -1,0 +1,21 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Para todos', titulo: 'Mis datos' }) %>
+<div class="grid g2" style="align-items:start">
+<form class="card form" method="post" action="/panel/perfil">
+  <div class="ficha-h"><div class="av lg rojo"><%= inicialesDe(usuario) %></div><div><h3 style="margin:0"><%= nombreDe(usuario) %></h3><div class="btns" style="margin-top:4px"><% usuario.roles.forEach(r => { %><span class="tag <%= r === 'socio' ? '' : 'rojo' %>"><%= ROLES[r] %></span><% }) %></div><% if (socio) { %><span class="small muted">Socio N.º <%= socio.nro %></span><% } %></div></div>
+  <div class="row"><label class="f" for="pf-n">Nombre<input class="in" id="pf-n" name="nombre" value="<%= usuario.nombre %>" required autocomplete="given-name"></label><label class="f" for="pf-a">Apellido<input class="in" id="pf-a" name="apellido" value="<%= usuario.apellido %>" required autocomplete="family-name"></label></div>
+  <div class="row"><label class="f" for="pf-e">Correo<input class="in" id="pf-e" name="email" type="email" value="<%= usuario.email %>" required autocomplete="email"></label><label class="f" for="pf-t">Celular<input class="in" id="pf-t" name="telefono" value="<%= usuario.telefono %>" autocomplete="tel" inputmode="tel"></label></div>
+  <% if (socio) { %>
+  <label class="f" for="pf-d">Dirección<input class="in" id="pf-d" name="direccion" value="<%= socio.direccion %>" autocomplete="street-address"></label>
+  <div class="eyebrow" style="margin-top:6px">Contacto de emergencia</div>
+  <div class="row"><label class="f" for="pf-en">Nombre<input class="in" id="pf-en" name="emNombre" value="<%= socio.emergencia.nombre %>"></label><label class="f" for="pf-et">Teléfono<input class="in" id="pf-et" name="emTelefono" value="<%= socio.emergencia.telefono %>" inputmode="tel"></label><label class="f" for="pf-ev">Vínculo<input class="in" id="pf-ev" name="emVinculo" value="<%= socio.emergencia.vinculo %>"></label></div>
+  <% } %>
+  <div><button class="btn pri">Guardar</button></div>
+</form>
+<form class="card form" method="post" action="/panel/perfil/clave"><h3>Cambiar contraseña</h3>
+  <label class="f" for="pc-a">Contraseña actual<input class="in" id="pc-a" name="actual" type="password" required autocomplete="current-password"></label>
+  <label class="f" for="pc-n">Nueva contraseña<input class="in" id="pc-n" name="nueva" type="password" required minlength="6" autocomplete="new-password"></label>
+  <label class="f" for="pc-n2">Repetí la nueva<input class="in" id="pc-n2" name="nueva2" type="password" required minlength="6" autocomplete="new-password"></label>
+  <div><button class="btn">Cambiar contraseña</button></div></form>
+</div>
+<%- include('../../partials/panel-fin') %>

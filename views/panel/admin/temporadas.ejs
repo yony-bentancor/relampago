@@ -1,0 +1,20 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Administración', titulo: 'Temporadas' }) %>
+<p class="small muted" style="margin-bottom:12px">Al cerrar una temporada se guardan las posiciones, los planteles y la cobranza como historial de solo lectura. Después egresa la categoría mayor y se agrega la nueva categoría menor.</p>
+<div class="grid g2" style="align-items:start">
+  <div class="card"><div class="btns" style="justify-content:space-between"><h3>Temporada <%= cfg.temporada %></h3><span class="chip ok">En curso</span></div>
+    <dl class="kv" style="margin-top:10px"><dt>Categorías</dt><dd><%= cats.length %> (<%= cats.map(c => c.anio).join(', ') %>)</dd><dt>Jugadores</dt><dd><%= jugadores %></dd><dt>Partidos jugados</dt><dd><%= jugados %> de <%= totalPartidos %></dd></dl>
+    <details style="margin-top:12px"><summary class="link">Cerrar la temporada <%= cfg.temporada %></summary>
+      <form class="form" method="post" action="/panel/temporadas/cerrar" style="margin-top:10px">
+        <div class="aviso warn"><div class="ic">!</div><p class="small">No se puede deshacer. Egresa la categoría <%= cats[0] ? cats[0].anio : '' %> y empieza la temporada <%= cfg.temporada + 1 %>.</p></div>
+        <label class="f" for="conf">Escribí <b>CERRAR <%= cfg.temporada %></b> para confirmar<input class="in" id="conf" name="confirmar" required autocomplete="off"></label>
+        <div><button class="btn pri">Cerrar temporada</button></div></form></details></div>
+  <% historial.forEach(t => { %>
+  <div class="card"><div class="btns" style="justify-content:space-between"><h3>Temporada <%= t.anio %></h3><span class="chip neu">Cerrada · solo lectura</span></div>
+    <div class="tbl-wrap" style="margin-top:10px"><table class="num"><thead><tr><th>Cat.</th><th class="r">Pos.</th><th class="r">PJ</th><th class="r">G</th><th class="r">E</th><th class="r">P</th><th class="r">GF</th><th class="r">GC</th><th class="r">Plantel</th></tr></thead><tbody>
+    <% t.resumen.forEach(r => { %><tr><td><%= r.anioCategoria %></td><td class="r"><b><%= r.pos %>º</b></td><td class="r"><%= r.pj %></td><td class="r"><%= r.g %></td><td class="r"><%= r.e %></td><td class="r"><%= r.p %></td><td class="r"><%= r.gf %></td><td class="r"><%= r.gc %></td><td class="r"><%= r.jugadores %></td></tr><% }) %></tbody></table></div>
+    <% if (t.cuotas) { %><p class="small muted" style="margin-top:8px">Cuotas: <%= pesos(t.cuotas.cobrado) %> cobrado de <%= pesos(t.cuotas.emitido) %>.</p><% } %>
+    <div class="btns" style="margin-top:10px"><%- include('../../partials/exportar', { tipo: 'temporada', params: 'anio=' + t.anio }) %></div></div>
+  <% }) %>
+</div>
+<%- include('../../partials/panel-fin') %>

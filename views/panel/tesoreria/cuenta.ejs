@@ -1,0 +1,18 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Tesorería', titulo: 'Estado de cuenta', acciones: s ? include('../../partials/exportar', { tipo: 'cuenta', params: 'socio=' + s.id }) : '' }) %>
+<form class="filtros" method="get" action="/panel/cuenta"><label class="sr" for="cta">Socio</label><select class="in" id="cta" name="socio" data-autoenviar style="max-width:380px"><% conJugadores.forEach(x => { %><option value="<%= x.id %>" <%= s && x.id === s.id ? 'selected' : '' %>><%= x.u.apellido %>, <%= x.u.nombre %> · N.º <%= x.nro %></option><% }) %></select><noscript><button class="btn sm">Ver</button></noscript></form>
+<% if (s) { %>
+<div class="grid g4" style="margin-bottom:14px">
+  <%- include('../../partials/kpi', { l: 'Socio N.º ' + s.nro, v: nombreDe(s.u), s: s.u.telefono + ' · ' + s.u.email }) %>
+  <%- include('../../partials/kpi', { l: 'Jugadores', v: hijos.length, s: hijos.map(j => j.nombre).join(', ') }) %>
+  <%- include('../../partials/kpi', { l: 'Pagado', v: pesos(pagado) }) %>
+  <%- include('../../partials/kpi', { l: 'Deuda vencida', v: pesos(deuda) }) %>
+</div>
+<div class="btns" style="margin-bottom:12px"><% const proxima = cuotas.filter(q => q.estado !== 'pagada').sort((a, b) => a.periodo.localeCompare(b.periodo))[0]; if (proxima) { %><a class="btn pri sm" href="/panel/cuotas/<%= proxima.id %>/pagar?volver=<%= encodeURIComponent('/panel/cuenta/' + s.id) %>">Registrar pago</a><% } %><form method="post" action="/panel/cuenta/<%= s.id %>/aviso"><button class="btn sm">Enviar aviso al socio</button></form></div>
+<div class="tbl-wrap tarjetas"><table><thead><tr><th>Mes</th><th>Jugador</th><th class="r">Monto</th><th>Vence</th><th>Estado</th><th>Pago</th><th></th></tr></thead><tbody>
+<% cuotas.forEach(q => { %><tr><td class="principal" data-l="Mes"><%= nombreMes(q) %></td><td class="small" data-l="Jugador"><%= jugadores[q.jugador] ? jugadores[q.jugador].nombre : '' %></td><td class="r num" data-l="Monto"><%= pesos(q.monto) %></td><td class="num small" data-l="Vence"><%= fLarga(q.vence) %></td><td data-l="Estado"><%- include('../../partials/estado-cuota', { q }) %></td>
+  <td class="small muted" data-l="Pago"><%= q.pago ? fLarga(q.pago.fecha) + ' · ' + q.pago.metodo + (q.pago.registradoPor && nombres[q.pago.registradoPor] ? ' · registró ' + nombres[q.pago.registradoPor] : '') : '—' %></td>
+  <td class="r" data-l=""><% if (q.estado !== 'pagada') { %><a class="btn sm" href="/panel/cuotas/<%= q.id %>/pagar?volver=<%= encodeURIComponent('/panel/cuenta/' + s.id) %>">Marcar paga</a><% } %></td></tr><% }) %>
+</tbody></table></div>
+<% } else { %><div class="empty">No hay socios con jugadores.</div><% } %>
+<%- include('../../partials/panel-fin') %>

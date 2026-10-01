@@ -1,0 +1,29 @@
+<%- include('../../partials/panel-inicio') %>
+<% const DOCS = { cedula: 'Foto de la cédula', carne: 'Carné de salud', autorizacion: 'Autorización de imagen', fichaMedica: 'Ficha médica' }; %>
+<div class="main-h"><div class="ficha-h"><%- include('../../partials/cami', { n: j.camiseta }) %><div><div class="eyebrow">Ficha del jugador</div><h2><%= j.nombre %> <%= j.apellido %></h2><span class="muted"><%= c ? c.nombre : '' %> · <%= j.posicion %> · camiseta <%= j.camiseta %></span></div></div>
+  <div class="btns"><a class="btn sm" href="javascript:history.back()">Volver</a></div></div>
+<div class="grid g2">
+  <div class="card"><div class="eyebrow">Datos personales</div><dl class="kv" style="margin-top:6px"><dt>Nacimiento</dt><dd><%= fLarga(j.nacimiento) %> (<%= edad %> años)</dd><dt>Cédula</dt><dd class="num"><%= j.ci %></dd><dt>En el club desde</dt><dd><%= String(j.alta).slice(0, 4) %></dd><dt>Fotos</dt><dd><span class="chip <%= j.autorizaImagen ? 'ok' : 'warn' %>"><%= j.autorizaImagen ? 'Autorizadas' : 'No autorizadas' %></span></dd></dl></div>
+  <div class="card"><div class="eyebrow">Responsable</div><% if (responsable) { %><dl class="kv" style="margin-top:6px"><dt><%= s.parentesco %></dt><dd><%= nombreDe(responsable) %></dd><dt>Celular</dt><dd class="num"><%= responsable.telefono %></dd><dt>Correo</dt><dd><%= responsable.email %></dd><dt>Emergencia</dt><dd><%= s.emergencia.nombre || '—' %><%= s.emergencia.vinculo ? ' (' + s.emergencia.vinculo + ')' : '' %> <%= s.emergencia.telefono %></dd></dl><% } %></div>
+  <div class="card"><div class="eyebrow">Deportivo</div><dl class="kv" style="margin-top:6px"><dt>Entrenador</dt><dd><%= nombreDe(entrenador) %></dd><dt>Asistencia</dt><dd><%= asis.presentes %> de <%= asis.total %> entrenamientos (<%= asis.porcentaje %>%)</dd><dt>Convocatorias</dt><dd><%= convocatorias %></dd><dt>Partidos del equipo</dt><dd><%= partidos %> jugados</dd></dl>
+    <% if (puedeObservar) { %><form class="form" method="post" action="/panel/jugadores/<%= j.id %>/deportivo" style="margin-top:12px"><div class="row"><label class="f" for="fd-c">Camiseta<input class="in num" id="fd-c" name="camiseta" type="number" min="1" max="99" value="<%= j.camiseta %>"></label><label class="f" for="fd-p">Posición<select class="in" id="fd-p" name="posicion"><% ['Arquero','Defensa','Mediocampo','Delantero','A definir'].forEach(p => { %><option <%= j.posicion === p ? 'selected' : '' %>><%= p %></option><% }) %></select></label></div><div><button class="btn sm">Guardar</button></div></form><% } %></div>
+  <div class="card"><div class="eyebrow">Documentación</div><div class="lista" style="margin-top:6px">
+    <% Object.entries(DOCS).forEach(([k, l]) => { const d = j.docs && j.docs[k]; %><div class="li"><span class="small"><%= l %></span><span class="btns"><% if (d && typeof d === 'object') { %><a class="small" href="/archivos/<%= d.archivo %>" target="_blank" rel="noopener">Ver archivo</a><% } %><span class="chip <%= d ? 'ok' : 'mal' %> plain"><%= d ? 'Entregada' : 'Falta' %></span></span></div><% }) %>
+    <div class="li"><span class="small">Vencimiento del carné</span><span class="chip <%= estadoCarne.clase %>"><%= estadoCarne.texto %></span></div></div></div>
+</div>
+<% if (verMedica) { %>
+<div class="sensible" style="margin-top:16px"><div class="eyebrow" style="color:var(--mal)">Información médica · acceso restringido</div>
+  <dl class="kv" style="margin-top:6px"><dt>Observaciones</dt><dd><%= j.medica.observaciones || 'Sin observaciones' %></dd><dt>Grupo sanguíneo</dt><dd><%= j.medica.grupoSanguineo || '—' %></dd><dt>Prestador de salud</dt><dd><%= j.medica.prestador || '—' %></dd><dt>Emergencia móvil</dt><dd><%= j.medica.emergenciaMovil || '—' %></dd></dl>
+  <p class="small muted" style="margin-top:6px">Solo la ven la administración, el entrenador de la categoría y la familia.</p></div>
+<% } %>
+<div class="card" style="margin-top:16px"><div class="eyebrow">Observaciones deportivas</div>
+  <div class="lista"><% (j.observaciones || []).forEach(o => { %><div><span class="small muted"><%= fCorta(o.fecha) %><%= o.autor && autores[o.autor] ? ' · ' + autores[o.autor] : '' %></span><p><%= o.texto %></p></div><% }) %><% if (!(j.observaciones || []).length) { %><p class="small muted" style="padding:8px 0">Sin observaciones.</p><% } %></div>
+  <% if (puedeObservar) { %><form class="btns" method="post" action="/panel/jugadores/<%= j.id %>/observaciones" style="margin-top:8px"><label class="sr" for="obs">Nueva observación</label><input class="in" id="obs" name="texto" placeholder="Agregar una observación" required maxlength="400" style="flex:1;min-width:200px"><button class="btn sm">Agregar</button></form><% } %>
+</div>
+<% if (cuotas) { %>
+<div class="card" style="margin-top:16px"><div class="eyebrow">Cuotas de <%= j.nombre %></div>
+  <div class="tbl-wrap tarjetas" style="margin-top:8px"><table><thead><tr><th>Mes</th><th class="r">Monto</th><th>Estado</th><th>Pago</th></tr></thead><tbody>
+  <% cuotas.forEach(q => { %><tr><td class="principal" data-l="Mes"><%= q.periodo %></td><td class="r num" data-l="Monto"><%= pesos(q.monto) %></td><td data-l="Estado"><%- include('../../partials/estado-cuota', { q }) %></td><td class="small muted" data-l="Pago"><%= q.pago ? fLarga(q.pago.fecha) + ' · ' + q.pago.metodo : '—' %></td></tr><% }) %>
+  </tbody></table></div></div>
+<% } %>
+<%- include('../../partials/panel-fin') %>

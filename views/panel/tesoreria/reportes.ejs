@@ -1,0 +1,12 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Tesorería', titulo: 'Reportes mensuales', acciones: include('../../partials/exportar', { tipo: 'reporte' }) }) %>
+<div class="tbl-wrap" style="margin-bottom:16px"><table class="num"><thead><tr><th>Mes</th><th class="r">Cuotas</th><th class="r">Pagas</th><th class="r">Emitido</th><th class="r">Cobrado</th><th class="r">% cobrado</th></tr></thead><tbody>
+<% meses.forEach(m => { %><tr><td><%= m.mes %></td><td class="r"><%= m.cuotas %></td><td class="r"><%= m.pagas %></td><td class="r"><%= pesos(m.emitido) %></td><td class="r"><%= pesos(m.cobrado) %></td><td class="r"><b><%= Math.round(m.cobrado / (m.emitido || 1) * 100) %>%</b></td></tr><% }) %>
+<tr class="club"><td>Total</td><td class="r"><%= meses.reduce((t, m) => t + m.cuotas, 0) %></td><td class="r"><%= meses.reduce((t, m) => t + m.pagas, 0) %></td><td class="r"><%= pesos(meses.reduce((t, m) => t + m.emitido, 0)) %></td><td class="r"><%= pesos(meses.reduce((t, m) => t + m.cobrado, 0)) %></td><td></td></tr></tbody></table></div>
+<div class="grid g2" style="align-items:start">
+  <div class="card"><h3>Cobranza por categoría</h3><div class="tbl-wrap" style="margin-top:8px"><table class="num"><thead><tr><th>Categoría</th><th class="r">Emitido</th><th class="r">Cobrado</th><th class="r">%</th></tr></thead><tbody>
+  <% porCategoria.forEach(r => { %><tr><td><%= r.c.anio %></td><td class="r"><%= pesos(r.emitido) %></td><td class="r"><%= pesos(r.cobrado) %></td><td class="r"><%= Math.round(r.cobrado / (r.emitido || 1) * 100) %>%</td></tr><% }) %></tbody></table></div></div>
+  <div class="card"><h3>Ingresos por forma de pago</h3><div class="tbl-wrap" style="margin-top:8px"><table class="num"><thead><tr><th>Forma de pago</th><th class="r">Monto</th></tr></thead><tbody>
+  <% porMetodo.forEach(([k, v]) => { %><tr><td><%= k %></td><td class="r"><%= pesos(v) %></td></tr><% }) %></tbody></table></div></div>
+</div>
+<%- include('../../partials/panel-fin') %>

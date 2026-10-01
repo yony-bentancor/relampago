@@ -1,0 +1,22 @@
+<%- include('../../partials/panel-inicio') %>
+<% if (!cat) { %><%- include('../../partials/encabezado', { eyebrow: 'Delegado', titulo: 'Cargar resultados' }) %><div class="empty">No sos delegado de ninguna categoría.</div><% } else { %>
+<%- include('../../partials/encabezado', { eyebrow: 'Delegado', titulo: 'Partidos · ' + cat.nombre }) %>
+<%- include('../../partials/pestanias', { cats, sel: cat.id, base: '/panel/resultados' }) %>
+<p class="small muted" style="margin-bottom:12px">Cargá el resultado al terminar cada partido. La tabla y la web pública se actualizan solas.</p>
+<% if (sinResultado.length) { %><div class="aviso warn" style="margin-bottom:12px"><div class="ic">!</div><p class="small">Hay <%= sinResultado.length %> partido<%= sinResultado.length > 1 ? 's' : '' %> jugado<%= sinResultado.length > 1 ? 's' : '' %> sin resultado.</p></div><% } %>
+<div class="grid g2"><% partidos.forEach(p => { const nos = p.local === 'Relámpago'; %>
+  <form class="card" id="p-<%= p.id %>" method="post" action="/panel/partidos/<%= p.id %>/resultado">
+    <div class="btns" style="justify-content:space-between"><span class="small muted"><%= typeof p.fecha === 'number' ? 'Fecha ' + p.fecha : p.fecha %> · <%= fCorta(p.dia) %> <%= p.hora || '' %></span><% if (p.jugado) { %><span class="chip ok plain">Cargado</span><% } else if (p.dia < hoy) { %><span class="chip warn plain">Falta resultado</span><% } %></div>
+    <div class="match" style="margin-top:8px"><div class="eq <%= nos ? 'club' : '' %>"><%= p.local %></div>
+      <div class="btns" style="flex-wrap:nowrap;gap:4px"><label class="sr" for="gl-<%= p.id %>">Goles <%= p.local %></label><input class="in num" style="width:56px;text-align:center" type="number" min="0" max="40" inputmode="numeric" id="gl-<%= p.id %>" name="gl" value="<%= p.gl ?? '' %>"><span>–</span><label class="sr" for="gv-<%= p.id %>">Goles <%= p.visitante %></label><input class="in num" style="width:56px;text-align:center" type="number" min="0" max="40" inputmode="numeric" id="gv-<%= p.id %>" name="gv" value="<%= p.gv ?? '' %>"></div>
+      <div class="eq v <%= !nos ? 'club' : '' %>"><%= p.visitante %></div></div>
+    <div class="btns" style="margin-top:10px;justify-content:flex-end"><% if (p.jugado) { %><button class="btn ghost sm" name="borrar" value="1">Borrar resultado</button><% } %><button class="btn sm <%= p.jugado ? '' : 'pri' %>"><%= p.jugado ? 'Corregir' : 'Guardar' %></button></div>
+  </form>
+<% }) %></div>
+<details class="card" style="margin-top:16px"><summary class="link">Agregar un partido amistoso o fuera del fixture</summary>
+  <form class="form" method="post" action="/panel/partidos" style="margin-top:10px"><input type="hidden" name="cat" value="<%= cat.id %>">
+    <div class="row"><label class="f" for="np-r">Rival<input class="in" id="np-r" name="rival" required maxlength="60"></label><label class="f" for="np-d">Día<input class="in" type="date" id="np-d" name="dia" required></label><label class="f" for="np-h">Hora<input class="in" type="time" id="np-h" name="hora" value="<%= cat.hora %>"></label><label class="f" for="np-c">Condición<select class="in" id="np-c" name="condicion"><option value="local">Local</option><option value="visitante">Visitante</option></select></label></div>
+    <div><button class="btn">Agregar partido</button></div></form></details>
+<div style="margin-top:16px"><h3 style="margin-bottom:8px">Tabla actual</h3><%- include('../../partials/tabla', { filas: tabla, compacta: false }) %></div>
+<% } %>
+<%- include('../../partials/panel-fin') %>

@@ -1,2 +1,10 @@
 node_modules/
-.envgit remote -v
+.env
+data/db.json
+data/*.tmp
+uploads/privado/*
+uploads/publico/*
+!uploads/privado/.gitkeep
+!uploads/publico/.gitkeep
+.DS_Store
+npm-debug.log*

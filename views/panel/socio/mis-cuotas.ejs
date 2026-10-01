@@ -1,0 +1,18 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Mi familia', titulo: 'Cuotas', acciones: include('../../partials/exportar', { tipo: 'cuenta', params: 'socio=' + usuario.socioId }) }) %>
+<% if (aPagar.length) { %>
+<div class="card" style="margin-bottom:16px;border-color:var(--rojo)">
+  <div class="li"><div><div class="eyebrow">A pagar</div><div class="kpi" style="padding:0"><div class="v"><%= pesos(aPagar.reduce((t, q) => t + q.monto, 0)) %></div></div><span class="small muted"><%= aPagar.map(q => nombreMes(q) + ' (' + (jugadores[q.jugador] ? jugadores[q.jugador].nombre : '') + ')').join(', ') %></span></div>
+  <div class="btns"><a class="btn pri" href="/panel/mis-cuotas/pagar">Pagar online</a></div></div>
+  <details style="margin-top:12px"><summary class="link">Pagué por transferencia</summary>
+    <form class="form" method="post" action="/panel/mis-cuotas/transferencia" enctype="multipart/form-data" style="margin-top:10px">
+      <p class="small muted">Transferí a la cuenta del club (<%= cfg.cuentaTransferencia %>) y subí el comprobante. Tesorería lo confirma y te avisa.</p>
+      <% aPagar.forEach(q => { %><label class="check"><input type="checkbox" name="cuotas" value="<%= q.id %>" checked><span><%= nombreMes(q) %> · <%= jugadores[q.jugador] ? jugadores[q.jugador].nombre : '' %> · <%= pesos(q.monto) %></span></label><% }) %>
+      <div class="drop"><span class="nombre-archivo">Comprobante</span><input type="file" name="comprobante" accept="image/*,application/pdf" required aria-label="Comprobante de transferencia"></div>
+      <div><button class="btn">Enviar a tesorería</button></div></form></details>
+</div>
+<% } else { %><div class="aviso info" style="margin-bottom:16px"><div class="ic">✓</div><p class="small">Estás al día. ¡Gracias!</p></div><% } %>
+<div class="tbl-wrap tarjetas"><table><thead><tr><th>Mes</th><th>Jugador</th><th class="r">Monto</th><th>Vence</th><th>Estado</th><th>Pago</th></tr></thead><tbody>
+<% cuotas.forEach(q => { %><tr><td class="principal" data-l="Mes"><%= nombreMes(q) %></td><td data-l="Jugador"><%= jugadores[q.jugador] ? jugadores[q.jugador].nombre : '' %></td><td class="r num" data-l="Monto"><%= pesos(q.monto) %></td><td class="small num" data-l="Vence"><%= fLarga(q.vence) %></td><td data-l="Estado"><%- include('../../partials/estado-cuota', { q }) %></td><td class="small muted" data-l="Pago"><%= q.pago && q.estado === 'pagada' ? fLarga(q.pago.fecha) + ' · ' + q.pago.metodo : q.estado === 'a confirmar' ? 'Transferencia informada' : '—' %></td></tr><% }) %>
+</tbody></table></div>
+<%- include('../../partials/panel-fin') %>

@@ -1,0 +1,14 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Entrenador', titulo: 'Convocatoria · ' + cat.nombre }) %>
+<%- include('../../partials/pestanias', { cats, sel: cat.id, base: '/panel/convocatorias' }) %>
+<% if (!partido) { %><div class="empty">No hay partidos próximos para esta categoría.</div><% } else { %>
+  <% if (proximos.length > 1) { %><div class="tabs"><% proximos.slice(0, 6).forEach(p => { %><a class="<%= p.id === partido.id ? 'on' : '' %>" href="/panel/convocatorias?cat=<%= cat.id %>&partido=<%= p.id %>"><%= fCorta(p.dia) %></a><% }) %></div><% } %>
+  <%- include('../../partials/partido', { p: partido }) %>
+  <form class="card" method="post" action="/panel/convocatorias/<%= partido.id %>" style="margin-top:14px">
+    <div class="btns" style="justify-content:space-between"><h3>Convocados (<span data-contador="convocados">0</span>)</h3><%- conv && conv.publicada ? '<span class="chip ok">Publicada a las familias</span>' : '<span class="chip warn">Borrador</span>' %></div>
+    <div class="grid g3" style="margin-top:10px"><% jugadores.forEach(({ j, carne }) => { %><label class="check card" style="padding:12px;align-items:center"><input type="checkbox" name="convocados" value="<%= j.id %>" <%= conv && conv.jugadores.includes(j.id) ? 'checked' : '' %>><span><%= j.nombre %> <%= j.apellido %><% if (carne.clase === 'mal') { %> <span class="chip mal plain">Carné vencido</span><% } %></span></label><% }) %></div>
+    <label class="f" for="cv-cit" style="margin-top:12px">Citación<input class="in" id="cv-cit" name="citacion" maxlength="200" value="<%= conv ? conv.citacion : 'Presentarse 40 minutos antes con equipo completo.' %>"></label>
+    <div class="btns" style="margin-top:12px"><button class="btn pri" name="accion" value="publicar"><%= conv && conv.publicada ? 'Actualizar y avisar' : 'Publicar y avisar a las familias' %></button><button class="btn" name="accion" value="borrador">Guardar borrador</button><button type="button" class="btn ghost sm" data-marcar-todos="convocados">Marcar todos</button></div>
+  </form>
+<% } %>
+<%- include('../../partials/panel-fin') %>

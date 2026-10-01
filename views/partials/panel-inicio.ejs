@@ -1,0 +1,16 @@
+<%- include('head') %>
+<div class="wrap panel">
+  <% let actual = null; secciones.forEach(g => g.items.forEach(([url, txt]) => { if (ruta === url || (ruta.startsWith(url + '/') )) actual = txt; })); %>
+  <div class="barra-panel"><button class="btn sm osc" type="button" data-secciones aria-expanded="false" aria-controls="secciones">Secciones</button><span class="actual"><%= actual || '' %></span></div>
+  <div class="velo" hidden></div>
+  <aside class="side" id="secciones" aria-label="Secciones del panel">
+    <div class="cerrar-side"><b class="eyebrow">Mi panel</b><button class="btn ghost sm" type="button" data-cerrar-secciones>Cerrar</button></div>
+    <% secciones.forEach(g => { %>
+      <div class="grp"><b><%= g.titulo %></b>
+      <% g.items.forEach(([url, txt, n]) => { const on = ruta === url || ruta.startsWith(url + '/'); %>
+        <a href="<%= url %>" class="<%= on ? 'on' : '' %>"<%- on ? ' aria-current="page"' : '' %>><span><%= txt %></span><% if (n) { %><span class="cnt"><%= n %></span><% } %></a>
+      <% }) %></div>
+    <% }) %>
+    <div class="grp"><b>Cuenta</b><form method="post" action="/salir"><button class="btn ghost sm" style="width:100%;justify-content:flex-start">Salir</button></form></div>
+  </aside>
+  <section style="min-width:0">

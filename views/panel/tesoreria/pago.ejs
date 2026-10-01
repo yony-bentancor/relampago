@@ -1,0 +1,13 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Tesorería', titulo: q.estado === 'a confirmar' ? 'Confirmar transferencia' : 'Registrar pago' }) %>
+<form class="card form" method="post" action="/panel/cuotas/<%= q.id %>/pagar" style="max-width:560px">
+  <input type="hidden" name="volver" value="<%= typeof volver !== 'undefined' ? volver : '' %>">
+  <p><b><%= nombreDe(s.u) %></b> · socio N.º <%= s.nro %><br><span class="muted"><%= nombreMes(q) %> · <%= j ? j.nombre + ' ' + j.apellido : '' %></span></p>
+  <div class="kpi" style="padding:4px 0"><div class="v"><%= pesos(q.monto) %></div></div>
+  <% if (q.pago && q.pago.comprobante) { %><p><a class="btn sm" href="/archivos/<%= q.pago.comprobante %>" target="_blank" rel="noopener">Ver comprobante</a></p><% } %>
+  <div class="row"><label class="f" for="mp-m">Forma de pago<select class="in" id="mp-m" name="metodo"><% metodos.forEach(m => { %><option <%= (q.estado === 'a confirmar' ? 'Transferencia' : 'Efectivo') === m ? 'selected' : '' %>><%= m %></option><% }) %></select></label>
+  <label class="f" for="mp-f">Fecha<input class="in" type="date" id="mp-f" name="fecha" value="<%= q.pago && q.pago.fecha ? q.pago.fecha : hoy %>" max="<%= hoy %>"></label></div>
+  <label class="check"><input type="hidden" name="avisar" value="0"><input type="checkbox" name="avisar" value="1" checked><span>Avisar al socio ahora</span></label>
+  <div class="btns"><button class="btn pri">Marcar como paga</button><a class="btn ghost" href="javascript:history.back()">Cancelar</a></div>
+</form>
+<%- include('../../partials/panel-fin') %>

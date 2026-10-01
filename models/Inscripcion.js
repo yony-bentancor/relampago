@@ -1,23 +1,15 @@
-const mongoose = require("mongoose");
+/*
+ * Solicitud de inscripción de un jugador.
+ * Campos: id, nombre, apellido, nacimiento, ci, categoria, socio, estado (pendiente | en revisión | aprobada | rechazada),
+ *         fecha, docs { cedula, carne, otros }, autorizaImagen, carneVence, medica { observaciones, prestador }, nota, revisadaPor
+ */
+const Modelo = require("./Modelo");
 
-const inscripcionSchema = new mongoose.Schema(
-  {
-    nombreNinio: { type: String, required: true },
-    fechaNacimiento: Date,
-    categoriaInteres: String,
-    nombreResponsable: { type: String, required: true },
-    telefono: { type: String, required: true },
-    email: String,
-    barrio: String,
-    experienciaPrevia: String,
-    observacionesMedicas: String,
-    estado: {
-      type: String,
-      enum: ["nueva", "contactado", "cerrada"],
-      default: "nueva",
-    },
-  },
-  { timestamps: true },
-);
+class Inscripcion extends Modelo {
+  static coleccion = "inscripciones";
+  static prefijo = "i";
+  static ESTADOS = ["pendiente", "en revisión", "aprobada", "rechazada"];
+  static abiertas(i) { return i.estado === "pendiente" || i.estado === "en revisión"; }
+}
 
-module.exports = mongoose.model("Inscripcion", inscripcionSchema);
+module.exports = Inscripcion;

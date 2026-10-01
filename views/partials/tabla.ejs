@@ -1,0 +1,3 @@
+<div class="tbl-wrap"><table class="num"><thead><tr><th>#</th><th>Equipo</th><th class="r">PJ</th><% if (!compacta) { %><th class="r">G</th><th class="r">E</th><th class="r">P</th><th class="r">GF</th><th class="r">GC</th><% } %><th class="r">DG</th><th class="r">Pts</th></tr></thead><tbody>
+<% filas.forEach((r, i) => { %><tr class="<%= r.equipo === 'Relámpago' ? 'club' : '' %>"><td><%= i + 1 %></td><td><%= r.equipo %></td><td class="r"><%= r.pj %></td><% if (!compacta) { %><td class="r"><%= r.g %></td><td class="r"><%= r.e %></td><td class="r"><%= r.p %></td><td class="r"><%= r.gf %></td><td class="r"><%= r.gc %></td><% } %><td class="r"><%= r.gf - r.gc > 0 ? '+' : '' %><%= r.gf - r.gc %></td><td class="r"><b><%= r.pts %></b></td></tr><% }) %>
+</tbody></table></div>

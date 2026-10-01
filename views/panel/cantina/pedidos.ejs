@@ -1,0 +1,17 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Cantina', titulo: 'Pedidos', acciones: include('../../partials/exportar', { tipo: 'pedidos' }) }) %>
+<% const CLS = { pendiente: 'warn', listo: 'info', entregado: 'ok' }; %>
+<div class="grid g4" style="margin-bottom:14px">
+  <%- include('../../partials/kpi', { l: 'Para preparar', v: paraPreparar }) %>
+  <%- include('../../partials/kpi', { l: 'Listos para retirar', v: listos }) %>
+  <%- include('../../partials/kpi', { l: 'Vendido online', v: pesos(vendido), s: cantidad + ' pedidos' }) %>
+</div>
+<div class="tabs"><% [['abiertos','Abiertos'],['pendiente','Para preparar'],['listo','Listos'],['entregado','Entregados'],['todos','Todos']].forEach(([k, l]) => { %><a class="<%= estado === k ? 'on' : '' %>" href="/panel/cantina/pedidos?estado=<%= k %>"><%= l %></a><% }) %></div>
+<div class="grid g3"><% lista.forEach(o => { %>
+  <div class="card"><div class="btns" style="justify-content:space-between"><b>Pedido <%= o.numero %></b><span class="chip <%= CLS[o.estado] %>"><%= o.estado %></span></div>
+    <p class="small muted"><%= nombreDe(usuarios[o.usuario]) %> · <%= fCorta(o.fecha) %> <%= fHora(o.fecha) %> · <%= o.pago %></p>
+    <ul class="small" style="margin:8px 0;padding-left:18px"><% o.items.forEach(i => { %><li><%= i.cant %> × <%= i.nombre %></li><% }) %></ul>
+    <div class="btns" style="justify-content:space-between"><b class="num"><%= pesos(o.total) %></b>
+      <% if (o.estado === 'pendiente') { %><form method="post" action="/panel/cantina/pedidos/<%= o.id %>/estado"><button class="btn sm pri" name="estado" value="listo">Marcar listo</button></form><% } else if (o.estado === 'listo') { %><form method="post" action="/panel/cantina/pedidos/<%= o.id %>/estado"><button class="btn sm" name="estado" value="entregado">Entregado</button></form><% } %></div></div>
+<% }) %><% if (!lista.length) { %><div class="empty">No hay pedidos en este estado.</div><% } %></div>
+<%- include('../../partials/panel-fin') %>

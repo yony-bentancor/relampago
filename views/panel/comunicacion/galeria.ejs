@@ -1,0 +1,13 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Comunicación', titulo: 'Galería y sponsors' }) %>
+<% if (sinAutorizacion.length) { %><div class="aviso warn" style="margin-bottom:14px"><div class="ic">!</div><div class="small"><b><%= sinAutorizacion.length %> jugadores sin autorización de imagen.</b> No publiques fotos donde se los reconozca: <%= sinAutorizacion.map(j => j.nombre + ' ' + j.apellido + ' (' + (categoriasPorId[j.categoria] || {}).anio + ')').join(', ') %>.</div></div><% } %>
+<div class="gal"><% cfg.galeria.forEach((g, i) => { %><figure><img src="<%= g.foto %>" alt="" loading="lazy"><figcaption class="btns" style="justify-content:space-between"><span><%= g.titulo %></span><form method="post" action="/panel/galeria/quitar" data-confirmar="¿Quitar esta foto de la galería?"><input type="hidden" name="indice" value="<%= i %>"><button class="btn sm ghost">Quitar</button></form></figcaption></figure><% }) %></div>
+<form class="card form" method="post" action="/panel/galeria" enctype="multipart/form-data" style="margin-top:16px;max-width:620px"><h3>Subir foto</h3>
+  <div class="drop"><span class="nombre-archivo">Elegí una imagen</span><input type="file" name="foto" accept="image/*" required aria-label="Foto para la galería"></div>
+  <label class="f" for="g-t">Título<input class="in" id="g-t" name="titulo" maxlength="100" placeholder="Ej.: Categoría 2018 en el torneo"></label>
+  <label class="check"><input type="checkbox" name="confirmo" value="1" required><span>Confirmo que todos los jugadores que aparecen tienen autorización de imagen.</span></label>
+  <div><button class="btn pri">Publicar foto</button></div></form>
+<h3 style="margin:24px 0 8px">Sponsors</h3>
+<div class="grid g3"><% cfg.sponsors.forEach((s, i) => { %><div class="card sponsor"><div><b><%= s.nombre %></b><div class="small muted"><%= s.rubro %></div><form method="post" action="/panel/sponsors/quitar" style="margin-top:8px" data-confirmar="¿Quitar a <%= s.nombre %> de los sponsors?"><input type="hidden" name="indice" value="<%= i %>"><button class="btn sm ghost">Quitar</button></form></div></div><% }) %></div>
+<form class="card form" method="post" action="/panel/sponsors" style="margin-top:12px;max-width:620px"><h3>Agregar sponsor</h3><div class="row"><label class="f" for="sp-n">Nombre<input class="in" id="sp-n" name="nombre" required maxlength="60"></label><label class="f" for="sp-r">Rubro o aporte<input class="in" id="sp-r" name="rubro" maxlength="60"></label></div><div><button class="btn">Agregar</button></div></form>
+<%- include('../../partials/panel-fin') %>

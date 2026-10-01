@@ -1,0 +1,18 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Administración', titulo: 'Inscripciones', acciones: include('../../partials/exportar', { tipo: 'inscripciones' }) }) %>
+<% const CLS = { pendiente: 'warn', 'en revisión': 'info', aprobada: 'ok', rechazada: 'mal' }; const DOC = { cedula: 'Cédula', carne: 'Carné de salud', otros: 'Otros' }; %>
+<div class="tabs"><% [['abiertas','A revisar'],['aprobada','Aprobadas'],['rechazada','Rechazadas'],['todas','Todas']].forEach(([k, l]) => { %><a class="<%= filtro === k ? 'on' : '' %>" href="/panel/inscripciones?estado=<%= k %>"><%= l %></a><% }) %></div>
+<div class="grid"><% lista.forEach(i => { const r = responsables[i.id]; %>
+  <div class="card"><div class="li" style="align-items:flex-start"><div class="persona"><div class="av lg"><%= (i.nombre[0] || '') + (i.apellido[0] || '') %></div><div class="t"><b style="font-size:1.1rem;white-space:normal"><%= i.nombre %> <%= i.apellido %></b><span class="small muted"><%= categoriasPorId[i.categoria] ? categoriasPorId[i.categoria].nombre : '' %> · nació el <%= fLarga(i.nacimiento) %> · C.I. <%= i.ci %></span><br><span class="small muted">Responsable: <%= r ? nombreDe(r) + ' · ' + r.telefono : '—' %></span></div></div><span class="chip <%= CLS[i.estado] %>"><%= i.estado %></span></div>
+    <div class="btns" style="margin-top:10px"><% Object.entries(DOC).forEach(([k, l]) => { const d = i.docs[k]; if (k === 'otros' && !d) return; %><% if (d && typeof d === 'object') { %><a class="chip ok plain" href="/archivos/<%= d.archivo %>" target="_blank" rel="noopener"><%= l %>: ver</a><% } else { %><span class="chip <%= d ? 'ok' : 'mal' %> plain"><%= l %> <%= d ? 'adjunta' : 'falta' %></span><% } %><% }) %>
+      <span class="chip <%= i.autorizaImagen ? 'ok' : 'warn' %> plain"><%= i.autorizaImagen ? 'Autoriza fotos' : 'No autoriza fotos' %></span><span class="small muted">Enviada <%= fCorta(i.fecha) %> · carné vence <%= fLarga(i.carneVence) %></span></div>
+    <% if (i.medica && i.medica.observaciones) { %><p class="small" style="margin-top:8px"><b>Nota médica:</b> <%= i.medica.observaciones %></p><% } %>
+    <% if (i.nota) { %><p class="small muted" style="margin-top:8px"><%= i.nota %></p><% } %>
+    <% if (i.estado === 'pendiente' || i.estado === 'en revisión') { %>
+      <form class="btns" method="post" action="/panel/inscripciones/<%= i.id %>/estado" style="margin-top:12px">
+        <label class="sr" for="nota-<%= i.id %>">Nota para la familia</label><input class="in" id="nota-<%= i.id %>" name="nota" placeholder="Nota para la familia (opcional)" maxlength="300" style="flex:1 1 220px">
+        <% if (i.estado === 'pendiente') { %><button class="btn sm" name="estado" value="en revisión">Pasar a revisión</button><% } %>
+        <button class="btn pri sm" name="estado" value="aprobada">Aprobar</button><button class="btn sm" name="estado" value="rechazada">Rechazar</button></form>
+    <% } %></div>
+<% }) %><% if (!lista.length) { %><div class="empty">No hay inscripciones en este estado.</div><% } %></div>
+<%- include('../../partials/panel-fin') %>

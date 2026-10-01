@@ -1,0 +1,23 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Administración', titulo: 'Usuarios y permisos' }) %>
+<details class="card" style="margin-bottom:16px" <%= total === 0 ? 'open' : '' %>><summary class="link">Crear usuario</summary>
+  <form class="form" method="post" action="/panel/usuarios" style="margin-top:12px">
+    <div class="row"><label class="f" for="nu-n">Nombre<input class="in" id="nu-n" name="nombre" required></label><label class="f" for="nu-a">Apellido<input class="in" id="nu-a" name="apellido" required></label></div>
+    <div class="row"><label class="f" for="nu-e">Correo<input class="in" id="nu-e" name="email" type="email" required></label><label class="f" for="nu-t">Celular<input class="in" id="nu-t" name="telefono"></label><label class="f" for="nu-c">Contraseña inicial<input class="in" id="nu-c" name="clave" placeholder="Se genera sola si la dejás vacía"></label></div>
+    <div class="eyebrow">Permisos</div>
+    <div class="grid g4"><% roles.forEach(r => { %><label class="check"><input type="checkbox" name="roles" value="<%= r %>" <%= r === 'socio' ? 'checked' : '' %>><span><%= ROLES[r] %></span></label><% }) %></div>
+    <label class="f" for="nu-cat" style="max-width:320px">Categoría (para entrenador o delegado)<select class="in" id="nu-cat" name="categoria"><option value="">Ninguna</option><% cats.forEach(c => { %><option value="<%= c.id %>"><%= c.nombre %></option><% }) %></select></label>
+    <div><button class="btn pri">Crear usuario</button></div></form></details>
+<form class="filtros" method="get" action="/panel/usuarios">
+  <div class="tabs" style="margin:0"><% [['equipo','Equipo del club'],['socios','Socios'],['todos','Todos']].forEach(([k, l]) => { %><a class="<%= filtro === k ? 'on' : '' %>" href="/panel/usuarios?ver=<%= k %>"><%= l %></a><% }) %></div>
+  <input type="hidden" name="ver" value="<%= filtro %>"><label class="sr" for="bu">Buscar</label><input class="in" id="bu" name="q" placeholder="Buscar por nombre o correo" value="<%= q %>" type="search"><button class="btn sm">Buscar</button></form>
+<p class="small muted" style="margin-bottom:10px"><%= total %> usuarios<%= total > lista.length ? ' (se muestran ' + lista.length + ')' : '' %>. Una persona puede tener varios permisos: por ejemplo, un socio que también es delegado.</p>
+<div class="grid"><% lista.forEach(u => { const cats = Object.values(categoriasPorId); const extra = [...cats.filter(c => c.entrenador === u.id).map(c => 'DT ' + c.anio), ...(u.delegadoDe || []).map(c => 'Delegado ' + (categoriasPorId[c] ? categoriasPorId[c].anio : ''))]; %>
+  <form class="card" method="post" action="/panel/usuarios/<%= u.id %>/permisos"><input type="hidden" name="volver" value="<%= urlActual %>">
+    <div class="li" style="align-items:flex-start"><div class="persona"><div class="av <%= u.activo ? '' : '' %>"><%= inicialesDe(u) %></div><div class="t"><b><%= nombreDe(u) %></b><span class="small muted"><%= u.email %> · <%= u.telefono %></span><% if (extra.length) { %><br><span class="small muted"><%= extra.join(' · ') %></span><% } %></div></div><% if (!u.activo) { %><span class="chip mal">Desactivado</span><% } %></div>
+    <div class="btns" style="margin-top:10px"><% roles.forEach(r => { %><label class="check" style="font-size:.88rem;margin-right:6px"><input type="checkbox" name="roles" value="<%= r %>" <%= u.roles.includes(r) ? 'checked' : '' %>><span><%= ROLES[r] %></span></label><% }) %></div>
+    <div class="btns" style="margin-top:10px;justify-content:space-between"><label class="check" style="font-size:.88rem"><input type="checkbox" name="activo" value="1" <%= u.activo ? 'checked' : '' %>><span>Puede ingresar</span></label>
+      <span class="btns"><button class="btn sm pri">Guardar permisos</button><button class="btn sm ghost" formaction="/panel/usuarios/<%= u.id %>/clave" data-confirmar="¿Generar una contraseña nueva?">Nueva contraseña</button></span></div>
+  </form>
+<% }) %><% if (!lista.length) { %><div class="empty">No encontramos usuarios con esa búsqueda.</div><% } %></div>
+<%- include('../../partials/panel-fin') %>

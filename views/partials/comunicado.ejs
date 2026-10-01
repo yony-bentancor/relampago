@@ -1,0 +1,5 @@
+<div>
+  <div class="btns" style="justify-content:space-between"><span><span class="tag <%= m.origen === 'Club' ? 'rojo' : '' %>"><%= m.origen %></span> <span class="small muted">→ <%= m.paraTexto %></span></span><span class="small muted"><%= fCorta(m.fecha) %> <%= fHora(m.fecha) %></span></div>
+  <b style="display:block;margin-top:4px"><%= m.titulo %></b><p class="small muted" style="white-space:pre-line"><%= m.texto %></p>
+  <p class="small muted">Por <%= m.deNombre %></p>
+</div>

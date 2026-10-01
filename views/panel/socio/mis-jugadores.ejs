@@ -1,0 +1,15 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Mi familia', titulo: 'Mis jugadores', acciones: '<a class="btn pri sm" href="/panel/inscribir">Inscribir otro jugador</a>' }) %>
+<% if (!datos.length) { %><div class="empty">Todavía no tenés jugadores. <a class="btn pri sm" href="/panel/inscribir">Inscribir un jugador</a></div><% } %>
+<div class="grid g2"><% datos.forEach(({ j, c, entrenador, asis, carne, edad }) => { %>
+  <div class="card" id="j-<%= j.id %>"><div class="ficha-h"><%- include('../../partials/cami', { n: j.camiseta }) %><div><h3 style="margin:0"><%= j.nombre %> <%= j.apellido %></h3><span class="small muted"><%= c.nombre %> · <%= j.posicion %> · <%= edad %> años</span></div></div>
+    <dl class="kv" style="margin-top:12px"><dt>Entrenador</dt><dd><%= nombreDe(entrenador) %></dd><dt>Entrenamientos</dt><dd><%= c.entreno %></dd><dt>Asistencia</dt><dd><%= asis.presentes %> de <%= asis.total %> (<%= asis.porcentaje %>%)</dd><dt>Carné de salud</dt><dd><span class="chip <%= carne.clase %>"><%= carne.texto %></span></dd><dt>Fotos</dt><dd><%= j.autorizaImagen ? 'Autorizadas' : 'No autorizadas' %></dd></dl>
+    <div class="btns" style="margin-top:12px"><a class="btn sm" href="/panel/jugadores/<%= j.id %>">Ver ficha completa</a></div>
+    <details style="margin-top:12px" <%= carne.clase !== 'ok' ? 'open' : '' %>><summary class="link">Actualizar carné de salud</summary>
+      <form class="form" method="post" action="/panel/mis-jugadores/<%= j.id %>/carne" enctype="multipart/form-data" style="margin-top:10px">
+        <div class="drop"><span class="nombre-archivo">Foto o PDF del carné nuevo</span><input type="file" name="carne" accept="image/*,application/pdf" required aria-label="Carné de salud de <%= j.nombre %>"></div>
+        <label class="f" for="cv-<%= j.id %>">Nuevo vencimiento<input class="in" type="date" id="cv-<%= j.id %>" name="carneVence" required></label>
+        <div><button class="btn pri sm">Guardar carné</button></div></form></details>
+  </div>
+<% }) %></div>
+<%- include('../../partials/panel-fin') %>

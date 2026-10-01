@@ -1,0 +1,9 @@
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap" style="max-width:760px">
+  <a href="/noticias" class="small">← Todas las noticias</a>
+  <div class="eyebrow" style="margin-top:14px"><%= n.seccion %> · <%= fCorta(n.fecha) %></div>
+  <h1 style="margin:6px 0 16px"><%= n.titulo %></h1>
+  <% if (n.foto) { %><img src="<%= n.foto %>" alt="" style="width:100%;border-radius:12px;margin-bottom:16px"><% } %>
+  <p style="white-space:pre-line;font-size:1.08rem"><%= n.texto %></p>
+</div></section>
+<%- include('../partials/footer') %>

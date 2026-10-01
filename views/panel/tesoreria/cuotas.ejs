@@ -1,0 +1,18 @@
+<%- include('../../partials/panel-inicio') %>
+<% const params = new URLSearchParams({ estado, mes: periodo, cat }); [...params].forEach(([k, v]) => { if (!v) params.delete(k); }); %>
+<%- include('../../partials/encabezado', { eyebrow: 'Tesorería', titulo: 'Cuotas y pagos', acciones: include('../../partials/exportar', { tipo: 'cuotas', params: params.toString() }) }) %>
+<div class="tabs"><% [['a confirmar','A confirmar'],['vencida','Vencidas'],['pendiente','Pendientes'],['pagada','Pagadas'],['todas','Todas']].forEach(([k, l]) => { %><a class="<%= estado === k ? 'on' : '' %>" href="/panel/cuotas<%= qs({ estado: k, pagina: '' }) %>"><%= l %></a><% }) %></div>
+<form class="filtros" method="get" action="/panel/cuotas"><input type="hidden" name="estado" value="<%= estado %>">
+  <label class="sr" for="f-mes">Mes</label><select class="in" id="f-mes" name="mes" data-autoenviar><option value="">Todos los meses</option><% meses.forEach(m => { %><option value="<%= m %>" <%= periodo === m ? 'selected' : '' %>><%= nombreMes({ periodo: m }) %></option><% }) %></select>
+  <label class="sr" for="f-cat">Categoría</label><select class="in" id="f-cat" name="cat" data-autoenviar><option value="">Todas las categorías</option><% categorias.forEach(c => { %><option value="<%= c.id %>" <%= cat === c.id ? 'selected' : '' %>><%= c.nombre %></option><% }) %></select>
+  <noscript><button class="btn sm">Filtrar</button></noscript></form>
+<p class="small muted" style="margin-bottom:10px"><%= total %> cuotas · <b class="num"><%= pesos(suma) %></b>. Al marcar una cuota como paga, el socio recibe el aviso en el momento.</p>
+<div class="tbl-wrap tarjetas"><table><thead><tr><th>Socio</th><th>Jugador</th><th>Mes</th><th class="r">Monto</th><th>Estado</th><th>Pago</th><th></th></tr></thead><tbody>
+<% cuotas.forEach(q => { const s = socios[q.socio], j = jugadores[q.jugador]; %>
+  <tr><td class="principal" data-l="Socio"><a href="/panel/cuenta/<%= q.socio %>"><%= nombreDe(s.u) %></a></td><td class="small" data-l="Jugador"><%= j ? j.nombre + ' · ' + (categoriasPorId[j.categoria] || {}).anio : '' %></td><td data-l="Mes"><%= nombreMes(q) %></td><td class="r num" data-l="Monto"><%= pesos(q.monto) %></td><td data-l="Estado"><%- include('../../partials/estado-cuota', { q }) %></td>
+  <td class="small muted" data-l="Pago"><%= q.pago ? fLarga(q.pago.fecha) + ' · ' + q.pago.metodo : '—' %><% if (q.pago && q.pago.comprobante) { %> · <a href="/archivos/<%= q.pago.comprobante %>" target="_blank" rel="noopener">comprobante</a><% } %></td>
+  <td class="r" data-l=""><% if (q.estado !== 'pagada') { %><a class="btn sm <%= q.estado === 'a confirmar' ? 'pri' : '' %>" href="/panel/cuotas/<%= q.id %>/pagar?volver=<%= encodeURIComponent(urlActual) %>"><%= q.estado === 'a confirmar' ? 'Confirmar' : 'Marcar paga' %></a><% } %></td></tr>
+<% }) %></tbody></table></div>
+<% if (!cuotas.length) { %><div class="empty">No hay cuotas con estos filtros.</div><% } %>
+<% if (paginas > 1) { %><div class="paginas"><span class="small muted">Página <%= pagina %> de <%= paginas %></span><% if (pagina > 1) { %><a class="btn sm" href="/panel/cuotas<%= qs({ pagina: pagina - 1 }) %>">Anterior</a><% } %><% if (pagina < paginas) { %><a class="btn sm" href="/panel/cuotas<%= qs({ pagina: pagina + 1 }) %>">Siguiente</a><% } %></div><% } %>
+<%- include('../../partials/panel-fin') %>

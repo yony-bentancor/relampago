@@ -1,0 +1,5 @@
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap" style="max-width:760px"><div class="eyebrow">Error</div><h1 style="margin:8px 0 12px">Algo salió mal</h1><p class="muted">Probá de nuevo en unos segundos. Si sigue pasando, avisale al administrador.</p>
+<% if (typeof detalle !== 'undefined' && detalle) { %><pre style="white-space:pre-wrap;font-size:.8rem;background:var(--sup-2);padding:12px;border-radius:8px;overflow:auto;margin-top:14px"><%= detalle %></pre><% } %>
+<div class="btns" style="margin-top:16px"><a class="btn pri" href="/">Ir al inicio</a></div></div></section>
+<%- include('../partials/footer') %>

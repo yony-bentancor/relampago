@@ -1,0 +1,13 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Cantina online', titulo: nuevo ? 'Pedido confirmado' : 'Pedido ' + o.numero }) %>
+<div class="grid g2" style="align-items:start">
+  <div class="card" style="text-align:center"><div class="eyebrow">Pedido número</div><div class="kpi"><div class="v" style="font-size:3rem"><%= o.numero %></div></div>
+    <div class="qrbox" data-qr="RELAMPAGO-PEDIDO-<%= o.numero %>" data-tam="160" style="margin:10px auto"></div>
+    <p>Mostrá este código en el mostrador para retirar.</p>
+    <p class="small muted"><% if (o.pago === 'Pago online') { %>Pago online aprobado por <%= pesos(o.total) %> (simulado).<% } else if (o.pago === 'QR en cantina') { %>Pagás <%= pesos(o.total) %> escaneando el QR del mostrador al retirar.<% } else { %>Transferí <%= pesos(o.total) %> a la cuenta del club (<%= cfg.cuentaTransferencia %>) e indicá el número de pedido.<% } %></p>
+    <span class="chip <%= o.estado === 'entregado' ? 'ok' : o.estado === 'listo' ? 'info' : 'warn' %>"><%= o.estado === 'pendiente' ? 'En preparación' : o.estado === 'listo' ? 'Listo para retirar' : 'Entregado' %></span></div>
+  <div class="card"><h3>Detalle</h3><div class="lista"><% o.items.forEach(i => { %><div class="li"><span><%= i.cant %> × <%= i.nombre %></span><b class="num"><%= pesos(i.precio * i.cant) %></b></div><% }) %></div>
+    <div class="li" style="margin-top:10px"><b>Total</b><b class="num"><%= pesos(o.total) %></b></div><p class="small muted" style="margin-top:8px"><%= fCorta(o.fecha) %> <%= fHora(o.fecha) %> · <%= o.pago %></p>
+    <a class="btn" href="/panel/tienda" style="margin-top:12px">Volver a la cantina</a></div>
+</div>
+<%- include('../../partials/panel-fin') %>

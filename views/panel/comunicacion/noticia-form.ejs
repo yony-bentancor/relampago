@@ -1,0 +1,14 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Comunicación', titulo: titulo }) %>
+<form class="card form" method="post" enctype="multipart/form-data" style="max-width:760px">
+  <label class="f" for="nn-t">Título<input class="in" id="nn-t" name="titulo" required maxlength="140" value="<%= n.titulo %>"></label>
+  <label class="f" for="nn-s" style="max-width:260px">Sección<select class="in" id="nn-s" name="seccion"><% seccionesNoticia.forEach(s => { %><option <%= n.seccion === s ? 'selected' : '' %>><%= s %></option><% }) %></select></label>
+  <label class="f" for="nn-x">Texto<textarea class="in" id="nn-x" name="texto" required maxlength="5000" style="min-height:180px"><%= n.texto %></textarea></label>
+  <div class="eyebrow">Foto</div>
+  <% if (n.foto) { %><div class="btns"><img src="<%= n.foto %>" alt="" style="width:160px;border-radius:8px"><label class="check"><input type="checkbox" name="quitarFoto" value="1"><span>Quitar la foto</span></label></div><% } %>
+  <div class="drop"><span class="nombre-archivo">Subir una foto nueva</span><input type="file" name="foto" accept="image/*" aria-label="Foto de la noticia"></div>
+  <label class="f" for="nn-g">O elegí una de la galería<select class="in" id="nn-g" name="fotoGaleria"><option value="">Ninguna</option><% fotosGaleria.forEach(g => { %><option value="<%= g.foto %>" <%= n.foto === g.foto ? 'selected' : '' %>><%= g.titulo %></option><% }) %></select></label>
+  <label class="check"><input type="hidden" name="publicada" value="0"><input type="checkbox" name="publicada" value="1" <%= n.publicada !== false ? 'checked' : '' %>><span>Publicar en la web</span></label>
+  <div class="btns"><button class="btn pri">Guardar</button><a class="btn ghost" href="/panel/noticias">Cancelar</a></div>
+</form>
+<%- include('../../partials/panel-fin') %>

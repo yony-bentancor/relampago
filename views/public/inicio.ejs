@@ -1,0 +1,22 @@
+<%- include('../partials/head') %>
+<div class="hero"><div class="banda" aria-hidden="true"></div><div class="wrap">
+  <div><div class="eyebrow">Baby fútbol · Categorías <%= Object.values(categoriasPorId).filter(c => c.activa !== false).map(c => c.anio).sort()[0] %> a <%= Object.values(categoriasPorId).filter(c => c.activa !== false).map(c => c.anio).sort().pop() %></div>
+    <h1>Club Atlético<span>Relámpago</span></h1>
+    <p class="lead"><%= totalJugadores %> chiquilines, <%= totalCategorias %> categorías y un barrio que los acompaña cada sábado. Fixture, resultados, inscripciones y cuotas, todo en un mismo lugar.</p>
+    <div class="btns" style="margin-top:20px"><a class="btn pri" href="/hacete-socio">Inscribir a mi hijo</a><a class="btn" href="/fixture">Ver fixture</a></div></div>
+  <div class="foto"><img src="/img/foto2.jpg" alt="Jugadores de una categoría del club con la camiseta blanca y banda roja"></div>
+</div></div>
+<section class="blk"><div class="wrap">
+  <div class="sec-h"><h2>Próximos partidos</h2><a class="btn sm" href="/fixture">Fixture completo</a></div>
+  <% if (proximos.length) { %><div class="grid g3"><% proximos.forEach(p => { %><%- include('../partials/partido', { p }) %><% }) %></div><% } else { %><div class="empty">No hay partidos programados.</div><% } %>
+</div></section>
+<section class="blk" style="padding-top:0"><div class="wrap grid g2" style="align-items:start">
+  <div><div class="sec-h"><h2>Últimos resultados</h2></div><div class="grid"><% resultados.forEach(p => { %><%- include('../partials/partido', { p }) %><% }) %></div></div>
+  <div><div class="sec-h"><h2>Noticias</h2><a class="btn sm" href="/noticias">Todas</a></div>
+    <div class="grid"><% noticias.forEach(n => { %><%- include('noticia-tarjeta', { n, compacta: true }) %><% }) %></div></div>
+</div></section>
+<section class="blk" style="padding-top:0"><div class="wrap"><div class="sec-h"><h2>Nos acompañan</h2></div>
+  <div class="grid g3"><% cfg.sponsors.forEach(s => { %><div class="card sponsor"><div><b><%= s.nombre %></b><div class="small muted"><%= s.rubro %></div></div></div><% }) %>
+  <div class="card sponsor"><div><b style="color:var(--tinta-3)">Tu marca acá</b><div class="small muted">Consultá en secretaría</div></div></div></div>
+</div></section>
+<%- include('../partials/footer') %>

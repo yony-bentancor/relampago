@@ -1,0 +1,16 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Tesorería', titulo: 'Resumen de cuotas', acciones: include('../../partials/exportar', { tipo: 'reporte' }) }) %>
+<div class="grid g4">
+  <%- include('../../partials/kpi', { l: 'Cobrado en ' + cfg.temporada, v: pesos(cobrado), s: Math.round(cobrado / (emitido || 1) * 100) + '% de lo emitido' }) %>
+  <%- include('../../partials/kpi', { l: 'Deuda vencida', v: pesos(deuda), s: deudores.length + ' socios' }) %>
+  <%- include('../../partials/kpi', { l: mesActual ? 'Cobrado en ' + mesActual.mes.toLowerCase() : 'Este mes', v: pesos(mesActual ? mesActual.cobrado : 0), s: mesActual ? 'de ' + pesos(mesActual.emitido) + ' · vence el ' + cfg.diaVencimiento : 'sin cuota este mes' }) %>
+  <a href="/panel/cuotas?estado=a%20confirmar" style="text-decoration:none;color:inherit"><%- include('../../partials/kpi', { l: 'Transferencias a confirmar', v: aConfirmar, s: aConfirmar ? 'Revisar comprobantes' : 'Nada pendiente' }) %></a>
+</div>
+<div class="grid g2" style="margin-top:16px;align-items:start">
+  <div class="card"><h3>Ingresos por cuotas</h3><p class="small muted">Lo cobrado de cada mes, en pesos uruguayos.</p>
+    <%- include('grafico', { datos: meses.map(m => ({ l: m.mes, v: m.cobrado })), etiqueta: 'Ingresos por cuotas por mes' }) %></div>
+  <div class="card"><div class="btns" style="justify-content:space-between"><h3>Socios con deuda</h3><span class="btns"><form method="post" action="/panel/tesoreria/recordatorio" data-confirmar="¿Enviar un recordatorio a los <%= deudores.length %> socios con deuda?"><button class="btn sm">Enviar recordatorio</button></form><%- include('../../partials/exportar', { tipo: 'deudores' }) %></span></div>
+    <div class="lista"><% deudores.forEach(d => { %><div class="li"><a href="/panel/cuenta/<%= d.socio %>"><%= nombreDe(d.s.u) %></a><span><span class="small muted"><%= d.cuotas %> cuota<%= d.cuotas > 1 ? 's' : '' %></span> <b class="num"><%= pesos(d.monto) %></b></span></div><% }) %>
+    <% if (!deudores.length) { %><p class="small muted">No hay socios con cuotas vencidas.</p><% } %></div></div>
+</div>
+<%- include('../../partials/panel-fin') %>

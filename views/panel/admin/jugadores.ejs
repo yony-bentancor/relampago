@@ -1,0 +1,11 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Administración', titulo: 'Jugadores', acciones: include('../../partials/exportar', { tipo: 'jugadores', params: cat ? 'cat=' + cat : '' }) }) %>
+<form class="filtros" method="get" action="/panel/jugadores"><label class="sr" for="jc">Categoría</label><select class="in" id="jc" name="cat" data-autoenviar><option value="">Todas las categorías</option><% cats.forEach(c => { %><option value="<%= c.id %>" <%= cat === c.id ? 'selected' : '' %>><%= c.nombre %></option><% }) %></select>
+  <label class="sr" for="jq">Buscar</label><input class="in" id="jq" name="q" type="search" placeholder="Nombre o cédula" value="<%= q %>"><button class="btn sm">Buscar</button><span class="small muted"><%= filas.length %> jugadores</span></form>
+<div class="tbl-wrap tarjetas"><table><thead><tr><th>N.º</th><th>Jugador</th><th>Cat.</th><th>Edad</th><th>Responsable</th><th>Carné de salud</th><th class="c">Fotos</th><th class="c">Docs</th><th>Cuota</th></tr></thead><tbody>
+<% filas.forEach(({ j, responsable, carne, docs, vencidas, edad }) => { %>
+  <tr><td class="num" data-l="N.º"><%= j.camiseta %></td><td class="principal" data-l="Jugador"><a href="/panel/jugadores/<%= j.id %>"><b><%= j.nombre %> <%= j.apellido %></b></a></td><td data-l="Categoría"><%= categoriasPorId[j.categoria].anio %></td><td class="num" data-l="Edad"><%= edad %></td><td class="small" data-l="Responsable"><%= nombreDe(responsable) %></td>
+  <td data-l="Carné"><span class="chip <%= carne.clase %>"><%= carne.clase === 'ok' ? 'Vigente' : carne.texto %></span></td><td class="c" data-l="Fotos"><span class="chip <%= j.autorizaImagen ? 'ok' : 'warn' %> plain"><%= j.autorizaImagen ? 'Sí' : 'No' %></span></td><td class="c" data-l="Docs"><span class="chip <%= docs ? 'ok' : 'mal' %> plain"><%= docs ? 'Completos' : 'Falta' %></span></td>
+  <td data-l="Cuota"><%- vencidas ? '<span class="chip mal">' + vencidas + ' vencida' + (vencidas > 1 ? 's' : '') + '</span>' : '<span class="chip ok">Al día</span>' %></td></tr>
+<% }) %></tbody></table></div>
+<%- include('../../partials/panel-fin') %>

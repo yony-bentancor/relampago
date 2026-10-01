@@ -1,0 +1,21 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Comunicación', titulo: 'Enviar comunicado' }) %>
+<% const etiqueta = (id) => id === 'todos' ? 'Todos los socios' : id === 'socio' ? 'Un socio en particular' : (categoriasPorId[id] ? categoriasPorId[id].nombre : id); const primero = op.origenes[0]; %>
+<div class="grid g2" style="align-items:start">
+  <form class="card form" method="post" action="/panel/comunicados">
+    <% if (op.origenes.length > 1) { %><label class="f" for="cm-origen">Envía<select class="in" id="cm-origen" name="origen"><% op.origenes.forEach(o => { %><option><%= o %></option><% }) %></select><span class="ayuda">Como técnico solo podés escribirle a tus categorías.</span></label><% } else { %><input type="hidden" name="origen" value="<%= primero %>"><p class="small muted">Enviás como: <b><%= primero %></b></p><% } %>
+    <label class="f" for="cm-para">Para<select class="in" id="cm-para" name="para"><% (destinos[primero] || []).forEach(d => { %><option value="<%= d %>"><%= etiqueta(d) %></option><% }) %></select></label>
+    <label class="f" id="cm-socio-fila" for="cm-socio" hidden>Socio<select class="in" id="cm-socio" name="socio"><% socios.forEach(s => { %><option value="<%= s.id %>"><%= s.nombre %></option><% }) %></select></label>
+    <label class="f" for="cm-titulo">Título<input class="in" id="cm-titulo" name="titulo" required maxlength="120" placeholder="Ej.: Entrenamiento suspendido por lluvia"></label>
+    <label class="f" for="cm-texto">Mensaje<textarea class="in" id="cm-texto" name="texto" required maxlength="2000" placeholder="Ej.: Relámpago 2016 juega el sábado a las 10:30."></textarea></label>
+    <div class="btns"><span class="small muted">Plantillas:</span>
+      <button type="button" class="btn sm ghost" data-plantilla="Entrenamiento suspendido por lluvia" data-texto="Hoy se suspenden los entrenamientos por el estado de la cancha. Nos vemos en el próximo.">Lluvia</button>
+      <button type="button" class="btn sm ghost" data-plantilla="Recordatorio de cuota" data-texto="Te recordamos que la cuota vence el día <%= cfg.diaVencimiento %>. Podés pagar online desde la plataforma.">Cuota</button>
+      <button type="button" class="btn sm ghost" data-plantilla="Cambio de horario" data-texto="Este sábado cambia el horario del partido. Revisá el fixture en la web.">Horario</button></div>
+    <div><button class="btn pri">Enviar comunicado</button></div>
+    <p class="small muted">Llega como aviso en la plataforma. En el sistema real también puede salir por correo o WhatsApp.</p>
+    <script type="application/json" id="cm-destinos"><%- JSON.stringify(Object.fromEntries(Object.entries(destinos).map(([o, ds]) => [o, ds.map(d => [d, etiqueta(d)])]))).replace(/</g, '\\u003c') %></script>
+  </form>
+  <div class="card"><h3>Enviados</h3><div class="lista"><% enviados.forEach(m => { %><%- include('../../partials/comunicado', { m }) %><% }) %><% if (!enviados.length) { %><p class="small muted">Todavía no enviaste comunicados.</p><% } %></div></div>
+</div>
+<%- include('../../partials/panel-fin') %>

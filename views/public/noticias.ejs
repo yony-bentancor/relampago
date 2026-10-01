@@ -1,15 +1,6 @@
-<%- include('../partials/header') %>
-
-<h1>Noticias</h1>
-
-<div class="grid">
-  <% noticias.forEach(noticia => { %>
-    <div class="card">
-      <h3><%= noticia.titulo %></h3>
-      <p><%= noticia.resumen || 'Sin resumen' %></p>
-      <small><%= new Date(noticia.createdAt).toLocaleDateString('es-UY') %></small>
-    </div>
-  <% }) %>
-</div>
-
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap"><div class="sec-h"><div><div class="eyebrow">Novedades</div><h1>Noticias</h1></div></div>
+<div class="grid g2"><% noticias.forEach(n => { %><%- include('noticia-tarjeta', { n, compacta: false }) %><% }) %></div>
+<% if (!noticias.length) { %><div class="empty">Todavía no hay noticias.</div><% } %>
+</div></section>
 <%- include('../partials/footer') %>

@@ -1,0 +1,21 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Mi familia', titulo: 'Inscribir un jugador' }) %>
+<form class="card form" method="post" action="/panel/inscribir" enctype="multipart/form-data" style="max-width:820px">
+  <% if (errores.length) { %><div class="aviso mal"><div class="ic">!</div><ul class="small" style="margin:0;padding-left:16px"><% errores.forEach(e => { %><li><%= e %></li><% }) %></ul></div><% } %>
+  <div class="eyebrow">1 · Datos del jugador</div>
+  <div class="row"><label class="f" for="in-n">Nombre<input class="in" id="in-n" name="nombre" required value="<%= datos.nombre || '' %>"></label><label class="f" for="in-a">Apellido<input class="in" id="in-a" name="apellido" required value="<%= datos.apellido || '' %>"></label></div>
+  <div class="row"><label class="f" for="in-f">Fecha de nacimiento<input class="in" type="date" id="in-f" name="nacimiento" required value="<%= datos.nacimiento || '' %>"><span class="ayuda">La categoría se asigna por el año: <%= categorias.map(c => c.anio).join(', ') %>.</span></label><label class="f" for="in-ci">Cédula<input class="in" id="in-ci" name="ci" placeholder="5.123.456-7" required value="<%= datos.ci || '' %>"></label></div>
+  <div class="row"><label class="f" for="in-ps">Prestador de salud<input class="in" id="in-ps" name="prestador" placeholder="Mutualista o ASSE" value="<%= datos.prestador || '' %>"></label></div>
+  <label class="f" for="in-m">Información médica (alergias, medicación, cuidados)<textarea class="in" id="in-m" name="medica" placeholder="Solo la ven la administración, su entrenador y vos."><%= datos.medica || '' %></textarea></label>
+  <div class="eyebrow" style="margin-top:6px">2 · Documentación</div>
+  <div class="drop"><span class="nombre-archivo">Foto de la cédula</span><input type="file" name="cedula" accept="image/*,application/pdf" aria-label="Foto de la cédula"></div>
+  <div class="drop"><span class="nombre-archivo">Carné de salud</span><input type="file" name="carne" accept="image/*,application/pdf" aria-label="Carné de salud"></div>
+  <div class="drop"><span class="nombre-archivo">Otros documentos (opcional)</span><input type="file" name="otros" accept="image/*,application/pdf" aria-label="Otros documentos"></div>
+  <p class="ayuda">Imágenes o PDF de hasta 5 MB. Si hay un error tenés que volver a adjuntarlos.</p>
+  <label class="f" for="in-cv" style="max-width:260px">Vencimiento del carné de salud<input class="in" type="date" id="in-cv" name="carneVence" required value="<%= datos.carneVence || '' %>"></label>
+  <div class="eyebrow" style="margin-top:6px">3 · Autorizaciones</div>
+  <label class="check"><input type="checkbox" name="autorizaImagen" value="1" <%= datos.autorizaImagen ? 'checked' : '' %>><span>Autorizo al club a publicar fotos y videos de mi hijo o hija en la web y redes del club.</span></label>
+  <label class="check"><input type="checkbox" name="declaro" value="1" required <%= datos.declaro ? 'checked' : '' %>><span>Declaro que la información es correcta y que el jugador está apto para la actividad física.</span></label>
+  <div><button class="btn pri">Enviar inscripción</button></div><p class="small muted">La comisión la revisa y te avisa cuando quede aprobada.</p>
+</form>
+<%- include('../../partials/panel-fin') %>

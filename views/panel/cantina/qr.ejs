@@ -1,0 +1,10 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Cantina', titulo: 'QR del mostrador' }) %>
+<div class="grid g2" style="align-items:start">
+  <div class="card" style="text-align:center"><div class="qrbox" data-qr="<%= url %>" data-tam="220"></div><h3 style="margin-top:12px">Escaneá y pedí</h3>
+    <p class="small muted">Imprimí este código y pegalo en el mostrador. Al escanearlo, el socio abre la cantina online, arma el carrito y paga desde el celular.</p>
+    <p class="small" style="margin-top:8px;overflow-wrap:anywhere"><%= url %></p><button class="btn sm" type="button" data-copiar="<%= url %>">Copiar enlace</button></div>
+  <div class="card"><h3>Cómo funciona</h3><div class="lista"><% ['El socio escanea el QR o entra a la cantina desde la web','Inicia sesión: solo los usuarios registrados pueden comprar','Arma el carrito y paga online, por transferencia o al retirar','Recibe un número de pedido y lo retira en el mostrador'].forEach((t, i) => { %><div class="li" style="justify-content:flex-start;flex-wrap:nowrap"><span class="tag rojo"><%= i + 1 %></span><span><%= t %></span></div><% }) %></div>
+    <p class="small muted" style="margin-top:10px">El QR usa la dirección de este sitio. Cuando lo publiques con su dominio definitivo, cargá URL_SITIO en las variables de entorno.</p></div>
+</div>
+<%- include('../../partials/panel-fin') %>

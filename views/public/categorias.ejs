@@ -1,16 +1,15 @@
-<%- include('../partials/header') %>
-
-<h1>Categorías</h1>
-
-<div class="grid">
-  <% categorias.forEach(categoria => { %>
-    <div class="card">
-      <h3><%= categoria.nombre %></h3>
-      <p><strong>Horario:</strong> 15:00hs</p>
-      <p><strong>Días:</strong> <%= categoria.diasEntrenamiento?.join(', ') || 'A definir' %></p>
-      <p><%= categoria.descripcion || 'Sin descripción.' %></p>
-    </div>
-  <% }) %>
-</div>
-
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap">
+  <div class="sec-h"><div><div class="eyebrow">Equipos y planteles</div><h1>Categorías</h1></div></div>
+  <%- include('../partials/pestanias', { cats, sel: sel.id, base: '/categorias' }) %>
+  <div class="grid g2" style="align-items:start">
+    <div class="card"><div class="btns" style="justify-content:space-between"><h2><%= sel.nombre %></h2><% if (posicion) { %><span class="tag rojo"><%= posicion %>º en la tabla</span><% } %></div>
+      <dl class="kv" style="margin-top:12px"><dt>Entrenador</dt><dd><%= nombreDe(entrenador) %></dd><dt>Entrenamientos</dt><dd><%= sel.entreno %></dd><dt>Partidos</dt><dd>Sábados <%= sel.hora %></dd><dt>Edad</dt><dd><%= cfg.temporada - sel.anio %> años en <%= cfg.temporada %></dd></dl>
+      <hr class="sep"><div class="lista"><% jugadores.forEach(j => { %><div class="li"><div class="persona"><%- include('../partials/cami', { n: j.camiseta }) %><div class="t"><b><%= j.nombre %> <%= j.apellido[0] %>.</b><span class="small muted"><%= j.posicion %></span></div></div></div><% }) %></div>
+      <p class="small muted" style="margin-top:10px">En la web pública mostramos el nombre y la inicial del apellido. Las fotos de cada jugador se publican solo con la autorización de su familia.</p></div>
+    <div class="grid"><div class="sec-h" style="margin:0"><h2>Tabla</h2><a class="btn sm" href="/fixture?vista=tabla&cat=<%= sel.id %>">Completa</a></div><%- include('../partials/tabla', { filas: tabla, compacta: true }) %>
+      <div class="sec-h" style="margin:8px 0 0"><h2>Próximo partido</h2></div>
+      <% if (proximo) { %><%- include('../partials/partido', { p: proximo }) %><% } else { %><div class="empty">Sin partidos programados</div><% } %></div>
+  </div>
+</div></section>
 <%- include('../partials/footer') %>

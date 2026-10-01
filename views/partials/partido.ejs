@@ -1,0 +1,11 @@
+<% const club = e => e === 'Relámpago' ? 'club' : ''; const cat = categoriasPorId[p.categoria]; %>
+<div class="card">
+  <div class="btns" style="justify-content:space-between;margin-bottom:8px"><span class="tag rojo"><%= cat ? cat.anio : '' %></span><span class="small muted"><%= typeof p.fecha === 'number' ? 'Fecha ' + p.fecha : p.fecha %> · <%= fCorta(p.dia) %></span></div>
+  <div class="match"><div class="eq <%= club(p.local) %>"><%= p.local %></div>
+    <% if (p.jugado) { %><div class="marcador"><%= p.gl %> – <%= p.gv %></div><% } else { %><div class="marcador vs"><%= p.hora || 'vs' %></div><% } %>
+    <div class="eq v <%= club(p.visitante) %>"><%= p.visitante %></div></div>
+  <div class="meta"><span><%= p.cancha %></span>
+    <% if (p.jugado) { const d = p.local === 'Relámpago' ? p.gl - p.gv : p.gv - p.gl; %><span class="chip <%= d > 0 ? 'ok' : d < 0 ? 'mal' : 'neu' %> plain"><%= d > 0 ? 'Ganó' : d < 0 ? 'Perdió' : 'Empató' %></span><% } %>
+    <% if (typeof extra !== 'undefined' && extra) { %><%- extra %><% } %>
+  </div>
+</div>

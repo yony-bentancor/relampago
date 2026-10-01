@@ -1,0 +1,22 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Administración', titulo: 'Hola, ' + usuario.nombre, acciones: include('../../partials/exportar', { tipo: 'jugadores' }) }) %>
+<div class="grid g4">
+  <%- include('../../partials/kpi', { l: 'Jugadores', v: jugadores, s: 'en ' + categorias + ' categorías' }) %>
+  <%- include('../../partials/kpi', { l: 'Socios', v: socios, s: sociosConJugadores + ' con jugadores' }) %>
+  <%- include('../../partials/kpi', { l: 'Categorías', v: categorias }) %>
+  <%- include('../../partials/kpi', { l: 'Entrenadores', v: entrenadores }) %>
+  <%- include('../../partials/kpi', { l: 'Cuotas cobradas', v: pesos(cobrado), s: cuotasCobradas + ' cuotas en ' + cfg.temporada }) %>
+  <%- include('../../partials/kpi', { l: 'Cuotas pendientes', v: pesos(pendiente), s: cuotasPendientes + ' cuotas · ' + sociosConDeuda + ' socios con deuda' }) %>
+  <%- include('../../partials/kpi', { l: 'Próximos partidos', v: proximos.length, s: proximos[0] ? fCorta(proximos[0].dia) : 'sin partidos' }) %>
+  <a href="/panel/inscripciones" style="text-decoration:none;color:inherit"><%- include('../../partials/kpi', { l: 'Inscripciones nuevas', v: inscripciones.length, s: 'a revisar' }) %></a>
+</div>
+<div class="grid g2" style="margin-top:16px;align-items:start">
+  <div class="card"><div class="btns" style="justify-content:space-between"><h3>Inscripciones a revisar</h3><a class="btn sm" href="/panel/inscripciones">Ver todas</a></div>
+    <div class="lista"><% inscripciones.slice(0, 6).forEach(i => { %><div class="li"><div class="persona"><div class="av"><%= (i.nombre[0] || '') + (i.apellido[0] || '') %></div><div class="t"><b><%= i.nombre %> <%= i.apellido %></b><span class="small muted"><%= categoriasPorId[i.categoria] ? categoriasPorId[i.categoria].nombre : '' %> · <%= fCorta(i.fecha) %><%= sociosInscripcion[i.socio] ? ' · ' + nombreDe(sociosInscripcion[i.socio]) : '' %></span></div></div><span class="chip <%= i.estado === 'pendiente' ? 'warn' : 'info' %>"><%= i.estado %></span></div><% }) %>
+    <% if (!inscripciones.length) { %><p class="muted small">No hay solicitudes nuevas.</p><% } %></div></div>
+  <div class="card"><div class="btns" style="justify-content:space-between"><h3>Carnés de salud</h3><a class="btn sm" href="/panel/carnes">Ver todos</a></div>
+    <div class="lista"><% carnes.forEach(({ jugador: j, estado }) => { %><div class="li"><a href="/panel/jugadores/<%= j.id %>"><%= j.nombre %> <%= j.apellido %></a><span class="chip <%= estado.clase %>"><%= estado.texto %></span></div><% }) %>
+    <% if (!carnes.length) { %><p class="muted small">Todos los carnés están vigentes.</p><% } %></div></div>
+</div>
+<div class="card" style="margin-top:16px"><h3>Próxima fecha</h3><div class="grid g3" style="margin-top:8px"><% proximos.forEach(p => { %><%- include('../../partials/partido', { p }) %><% }) %></div><% if (!proximos.length) { %><p class="muted small">No hay partidos programados.</p><% } %></div>
+<%- include('../../partials/panel-fin') %>

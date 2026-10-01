@@ -1,0 +1,14 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Administración', titulo: 'Categorías' }) %>
+<p class="small muted" style="margin-bottom:12px">Asigná el entrenador y el delegado de cada categoría. El entrenador solo ve sus categorías; el delegado solo carga los resultados de la suya.</p>
+<div class="grid g2"><% filas.forEach(({ c, jugadores, padres }) => { %>
+  <form class="card form" method="post" action="/panel/categorias/<%= c.id %>">
+    <div class="btns" style="justify-content:space-between"><h3><%= c.nombre %></h3><span class="small muted"><%= jugadores %> jugadores</span></div>
+    <div class="row"><label class="f" for="ent-<%= c.id %>">Entrenador<select class="in" id="ent-<%= c.id %>" name="entrenador"><% entrenadores.forEach(u => { %><option value="<%= u.id %>" <%= c.entrenador === u.id ? 'selected' : '' %>><%= nombreDe(u) %></option><% }) %></select></label>
+      <label class="f" for="del-<%= c.id %>">Delegado<select class="in" id="del-<%= c.id %>" name="delegado"><option value="">Sin delegado</option><% padres.filter(Boolean).forEach(u => { %><option value="<%= u.id %>" <%= c.delegado === u.id ? 'selected' : '' %>><%= nombreDe(u) %></option><% }) %></select></label></div>
+    <div class="row"><label class="f" for="h-<%= c.id %>">Hora de los sábados<input class="in" type="time" id="h-<%= c.id %>" name="hora" value="<%= c.hora %>"></label><label class="f" for="en-<%= c.id %>">Entrenamientos<input class="in" id="en-<%= c.id %>" name="entreno" value="<%= c.entreno %>"></label></div>
+    <div><button class="btn sm pri">Guardar</button></div></form>
+<% }) %></div>
+<form class="card form" method="post" action="/panel/categorias" style="margin-top:16px;max-width:520px"><h3>Agregar categoría</h3><p class="small muted">Normalmente se agrega sola al cerrar la temporada.</p>
+  <div class="btns"><label class="sr" for="nc">Año de nacimiento</label><input class="in num" id="nc" name="anio" type="number" min="2000" max="2100" placeholder="Año de nacimiento" required style="max-width:200px"><button class="btn">Agregar</button></div></form>
+<%- include('../../partials/panel-fin') %>

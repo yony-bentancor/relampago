@@ -1,0 +1,18 @@
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap grid g2" style="align-items:start">
+  <form class="card form" method="post" action="/ingresar"><div class="eyebrow">Acceso al sistema</div><h2>Ingresar</h2>
+    <label class="f" for="lg-e">Correo electrónico<input class="in" id="lg-e" name="email" type="email" required autocomplete="username" inputmode="email" value="<%= email %>"></label>
+    <label class="f" for="lg-p">Contraseña<input class="in" id="lg-p" name="clave" type="password" required autocomplete="current-password"></label>
+    <div class="btns"><button class="btn pri">Ingresar</button><a class="btn ghost" href="/registro">Crear una cuenta</a></div></form>
+  <% if (prueba.length) { %>
+  <div class="card"><h3>Usuarios de prueba</h3>
+    <p class="small muted" style="margin-bottom:10px">Todos usan la contraseña <b><%= claveDemo %></b>. Tocá <b>Entrar</b> para ingresar directo con cada rol.</p>
+    <div class="lista"><% prueba.forEach(u => { %>
+      <form class="cuenta-demo" method="post" action="/ingresar"><input type="hidden" name="email" value="<%= u.email %>"><input type="hidden" name="clave" value="<%= claveDemo %>">
+        <div class="persona"><div class="av"><%= inicialesDe(u) %></div><div class="t"><b><%= u.prueba %></b><span class="small muted"><%= nombreDe(u) %> · <%= u.email %></span></div></div>
+        <button class="btn sm">Entrar</button></form>
+    <% }) %></div>
+    <p class="small muted" style="margin-top:10px">Para ocultar esta lista en producción, poné MODO_DEMO=false en las variables de entorno.</p></div>
+  <% } %>
+</div></section>
+<%- include('../partials/footer') %>

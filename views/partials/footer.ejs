@@ -1,8 +1,13 @@
 </main>
-
-<footer class="main-footer">
-  <p>© <%= new Date().getFullYear() %> Club Relámpago</p>
-</footer>
-
+<% if (!(typeof sinPie !== 'undefined' && sinPie)) { %>
+<footer class="pie"><div class="wrap">
+  <div><div class="persona"><img src="/img/escudo.jpg" alt="" style="width:46px;height:46px;background:#fff;border-radius:8px;padding:3px"><div class="t"><b style="font-family:var(--f-disp);font-size:1.2rem;text-transform:uppercase">C.A. Relámpago</b><span class="muted">Baby fútbol · Montevideo</span></div></div></div>
+  <div><h3>Sede y cancha</h3><p class="muted"><%= cfg.direccion %><br>Entrenamientos martes y jueves desde las 17:00</p></div>
+  <div><h3>Secretaría</h3><p class="muted">Martes y jueves de 18:00 a 20:00<br>Tel. <%= cfg.telefono %> · <%= cfg.email %></p></div>
+  <div><h3>Sponsors</h3><p class="muted"><%= cfg.sponsors.map(s => s.nombre).join(' · ') %></p></div>
+</div></footer>
+<% } %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script src="/js/main.js" defer></script>
 </body>
 </html>

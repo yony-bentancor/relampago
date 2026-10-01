@@ -1,0 +1,13 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Administración', titulo: 'Carnés de salud', acciones: '<form method="post" action="/panel/carnes/avisar"><button class="btn pri sm">Avisar a las familias</button></form>' + include('../../partials/exportar', { tipo: 'carnes' }) }) %>
+<div class="grid g4" style="margin-bottom:14px">
+  <%- include('../../partials/kpi', { l: 'Vencidos', v: vencidos, s: 'no pueden jugar' }) %>
+  <%- include('../../partials/kpi', { l: 'Vencen en ' + cfg.avisoCarneDias + ' días', v: porVencer, s: 'aviso automático' }) %>
+  <%- include('../../partials/kpi', { l: 'Vigentes', v: total - vencidos - porVencer }) %>
+</div>
+<div class="aviso info" style="margin-bottom:14px"><div class="ic">i</div><p class="small">La familia y la administración ven la alerta <%= cfg.avisoCarneDias %> días antes del vencimiento. El entrenador la ve en su plantel y en la convocatoria.</p></div>
+<div class="tbl-wrap tarjetas"><table><thead><tr><th>Jugador</th><th>Cat.</th><th>Vence</th><th>Estado</th><th>Responsable</th><th>Celular</th></tr></thead><tbody>
+<% lista.forEach(({ jugador: j, estado }) => { const r = socios[j.socio]; %><tr><td class="principal" data-l="Jugador"><a href="/panel/jugadores/<%= j.id %>"><b><%= j.nombre %> <%= j.apellido %></b></a></td><td data-l="Categoría"><%= categoriasPorId[j.categoria].anio %></td><td class="num" data-l="Vence"><%= fLarga(j.carneVence) %></td><td data-l="Estado"><span class="chip <%= estado.clase %>"><%= estado.texto %></span></td><td class="small" data-l="Responsable"><%= nombreDe(r) %></td><td class="num small" data-l="Celular"><%= r ? r.telefono : '' %></td></tr><% }) %>
+</tbody></table></div>
+<% if (!lista.length) { %><div class="empty">Todos los carnés están vigentes.</div><% } %>
+<%- include('../../partials/panel-fin') %>

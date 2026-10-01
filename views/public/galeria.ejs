@@ -1,0 +1,6 @@
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap"><div class="sec-h"><div><div class="eyebrow">Fotos</div><h1>Galería</h1></div></div>
+  <div class="gal"><% cfg.galeria.forEach(g => { %><figure><img src="<%= g.foto %>" alt="<%= g.titulo %>" loading="lazy"><figcaption><%= g.titulo %></figcaption></figure><% }) %></div>
+  <div class="aviso info" style="margin-top:16px"><div class="ic">i</div><p class="small">Solo se publican fotos de jugadores cuyas familias firmaron la autorización de uso de imagen.</p></div>
+</div></section>
+<%- include('../partials/footer') %>

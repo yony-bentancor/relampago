@@ -1,0 +1,13 @@
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap grid g2" style="align-items:center">
+  <div><div class="eyebrow">Institucional</div><h1 style="margin:6px 0 14px">Un club de barrio</h1>
+    <p style="max-width:60ch">El Club Atlético Relámpago es un club de baby fútbol formado por familias. Recibimos niñas y niños de 6 a 13 años en <%= entrenadores.length %> categorías, con un entrenador para cada una.</p>
+    <p style="max-width:60ch;margin-top:10px">Nos importa que jueguen, que aprendan a ser compañeros y que el sábado sea una fiesta para todos. El club se sostiene con la cuota de los socios, la cantina y el apoyo de nuestros sponsors.</p>
+    <p class="small muted" style="margin-top:12px">Texto de ejemplo. La historia, la fecha de fundación y las autoridades se cargan desde administración.</p></div>
+  <img src="/img/escudo.jpg" alt="Escudo del C.A. Relámpago" style="max-width:300px;width:100%;justify-self:center;background:#fff;border-radius:16px;padding:12px">
+</div></section>
+<section class="blk" style="padding-top:0"><div class="wrap"><div class="sec-h"><h2>Comisión y cuerpo técnico</h2></div><div class="grid g4">
+  <% comision.forEach(u => { %><div class="card persona"><div class="av rojo"><%= inicialesDe(u) %></div><div class="t"><b><%= nombreDe(u) %></b><span class="small muted"><%= u.roles.includes('tesorero') ? 'Tesorería' : 'Comisión directiva' %></span></div></div><% }) %>
+  <% entrenadores.forEach(({ c, e }) => { if (!e) return; %><div class="card persona"><div class="av"><%= inicialesDe(e) %></div><div class="t"><b><%= nombreDe(e) %></b><span class="small muted">Entrenador <%= c.anio %></span></div></div><% }) %>
+</div></div></section>
+<%- include('../partials/footer') %>

@@ -1,0 +1,11 @@
+<%- include('../../partials/panel-inicio') %>
+<%- include('../../partials/encabezado', { eyebrow: 'Mi familia', titulo: 'Partidos y convocatorias' }) %>
+<% if (!bloques.length) { %><div class="empty">Sin jugadores asociados.</div><% } %>
+<% bloques.forEach(({ j, c, proximos, convs, jugados }) => { %>
+  <h3 style="margin:8px 0 10px"><%= j.nombre %> · <%= c.nombre %></h3>
+  <div class="grid g3" style="margin-bottom:18px">
+    <% proximos.forEach(p => { const cv = convs[p.id]; const extra = cv ? (cv.jugadores.includes(j.id) ? '<span class="chip ok">Convocado</span><span class="small">' + esc(cv.citacion) + '</span>' : '<span class="chip neu">No convocado</span>') : ''; %><%- include('../../partials/partido', { p, extra }) %><% }) %>
+    <% jugados.forEach(p => { %><%- include('../../partials/partido', { p }) %><% }) %>
+  </div>
+<% }) %>
+<%- include('../../partials/panel-fin') %>

@@ -1,0 +1,12 @@
+<%- include('../partials/head') %>
+<section class="blk"><div class="wrap grid g2" style="align-items:start">
+  <div><div class="eyebrow">Contacto</div><h1 style="margin:6px 0 14px">Dónde estamos</h1>
+    <dl class="kv"><dt>Cancha</dt><dd><%= cfg.direccion %></dd><dt>Secretaría</dt><dd>Martes y jueves de 18:00 a 20:00</dd><dt>Teléfono</dt><dd><%= cfg.telefono %></dd><dt>Correo</dt><dd><%= cfg.email %></dd></dl>
+    <img src="/img/hero.jpg" alt="Cancha del club" style="margin-top:16px;border-radius:12px;width:100%;aspect-ratio:16/8;object-fit:cover"></div>
+  <form class="card form" method="post" action="/contacto"><h3>Escribinos</h3>
+    <label class="f" for="ct-n">Nombre<input class="in" id="ct-n" name="nombre" required maxlength="80" autocomplete="name"></label>
+    <label class="f" for="ct-c">Correo o teléfono<input class="in" id="ct-c" name="contacto" required maxlength="80"></label>
+    <label class="f" for="ct-m">Mensaje<textarea class="in" id="ct-m" name="mensaje" required maxlength="1000"></textarea></label>
+    <div><button class="btn pri">Enviar mensaje</button></div></form>
+</div></section>
+<%- include('../partials/footer') %>

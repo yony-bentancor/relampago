@@ -1,0 +1,1 @@
+<% if (cats.length > 1) { %><div class="tabs" role="navigation" aria-label="Categorías"><% cats.forEach(c => { %><a class="<%= c.id === sel ? 'on' : '' %>" href="<%= base %><%= base.includes('?') ? '&' : '?' %>cat=<%= c.id %>"><%= c.anio %></a><% }) %></div><% } %>

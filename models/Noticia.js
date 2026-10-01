@@ -1,14 +1,18 @@
-const mongoose = require("mongoose");
+/*
+ * Noticia de la web pública.
+ * Campos: id, fecha, titulo, seccion, texto, foto (ruta de imagen), publicada, autor
+ */
+const Modelo = require("./Modelo");
 
-const noticiaSchema = new mongoose.Schema(
-  {
-    titulo: { type: String, required: true },
-    resumen: String,
-    contenido: { type: String, required: true },
-    imagen: String,
-    publicada: { type: Boolean, default: true },
-  },
-  { timestamps: true },
-);
+class Noticia extends Modelo {
+  static coleccion = "noticias";
+  static prefijo = "n";
+  static SECCIONES = ["Club", "Resultados", "Comunidad", "Inscripciones"];
 
-module.exports = mongoose.model("Noticia", noticiaSchema);
+  static async publicadas() {
+    const ns = await this.todos((n) => n.publicada !== false);
+    return ns.sort((a, b) => b.fecha.localeCompare(a.fecha));
+  }
+}
+
+module.exports = Noticia;

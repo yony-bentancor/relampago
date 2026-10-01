@@ -1,0 +1,17 @@
+<% /* Barras de ingresos por mes. datos: [{ l, v }] */
+const W = 640, Hh = 240, pl = 56, pb = 28, pt = 22, pr = 8;
+const maxV = Math.max(1, ...datos.map(d => d.v));
+const paso = Math.pow(10, Math.floor(Math.log10(maxV))) / 2 || 1;
+const max = Math.ceil(maxV / paso) * paso;
+const bw = (W - pl - pr) / Math.max(1, datos.length), y = v => pt + (Hh - pt - pb) * (1 - v / max);
+const ticks = [0, .25, .5, .75, 1].map(t => t * max);
+const mil = v => v >= 1000 ? Math.round(v / 1000) + ' mil' : String(Math.round(v)); %>
+<div class="grafico"><svg viewBox="0 0 <%= W %> <%= Hh %>" role="img" aria-label="<%= etiqueta %>">
+  <g class="grid"><% ticks.forEach(t => { %><line x1="<%= pl %>" x2="<%= W - pr %>" y1="<%= y(t) %>" y2="<%= y(t) %>"/><text x="<%= pl - 8 %>" y="<%= y(t) + 4 %>" text-anchor="end"><%= mil(t) %></text><% }) %></g>
+  <% datos.forEach((d, i) => { const x = pl + i * bw + 5, w = Math.max(4, bw - 10), top = y(d.v), base = y(0); %>
+    <g><title><%= d.l %>: <%= pesos(d.v) %></title>
+      <% if (base - top > 4) { %><path class="barra" d="M<%= x %>,<%= base %> V<%= top + 4 %> q0,-4 4,-4 H<%= x + w - 4 %> q4,0 4,4 V<%= base %> Z"/><% } else if (d.v > 0) { %><rect class="barra" x="<%= x %>" y="<%= top %>" width="<%= w %>" height="<%= base - top %>"/><% } %>
+      <% if (i === 0 || i === datos.length - 1 || d.v === maxV) { %><text class="val" x="<%= x + w / 2 %>" y="<%= top - 6 %>" text-anchor="middle"><%= mil(d.v) %></text><% } %>
+      <text x="<%= x + w / 2 %>" y="<%= Hh - 8 %>" text-anchor="middle"><%= d.l.slice(0, 3) %></text></g>
+  <% }) %>
+</svg></div>
