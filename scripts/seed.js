@@ -675,7 +675,7 @@ function generar(fechaBase = hoy()) {
       { nombre: "Atan", rubro: "Indumentaria oficial" },
     ],
     galeria: [
-      { foto: "/img/foto1.jpg", titulo: "Foto del plantel" },
+      { foto: "/img/foto3.jpg", titulo: "Foto del plantel" },
       { foto: "/img/foto1.jpg", titulo: "La charla antes del partido" },
       { foto: "/img/hero.jpg", titulo: "Atardecer en la cancha del club" },
     ],
@@ -870,7 +870,7 @@ function generar(fechaBase = hoy()) {
       seccion: "Club",
       texto:
         "Gracias a nuestros sponsors renovamos el juego de camisetas de todas las categorías. Se entregan en la sede contra firma del responsable.",
-      foto: "/img/foto1.jpg",
+      foto: "/img/foto3.jpg",
       publicada: true,
       autor: comunicacion[0].id,
     },
@@ -914,14 +914,12 @@ function generar(fechaBase = hoy()) {
   const pedidos = [];
   for (let i = 1; i <= 8; i++) {
     const s = i <= 2 ? familiaPrueba : r.uno(socios);
-    const items = r
-      .muestra(productos, r.entre(1, 4))
-      .map((p) => ({
-        producto: p.id,
-        nombre: p.nombre,
-        precio: p.precio,
-        cant: r.entre(1, 3),
-      }));
+    const items = r.muestra(productos, r.entre(1, 4)).map((p) => ({
+      producto: p.id,
+      nombre: p.nombre,
+      precio: p.precio,
+      cant: r.entre(1, 3),
+    }));
     const dia = i < 6 ? sumarDias(HOY, -5) : HOY;
     pedidos.push({
       id: id("o"),
